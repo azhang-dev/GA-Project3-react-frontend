@@ -6,7 +6,7 @@ function SignUpForm(props) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     
-    const API_BASE_URL =  "http://localhost:3000/"
+    //const API_BASE_URL =  "http://localhost:3000/"
     const handleNameChange = (ev) => {
         setName(ev.target.value)
     }
@@ -24,7 +24,7 @@ function SignUpForm(props) {
 
     const handleSubmit = (ev) => {
         ev.preventDefault()
-        fetch(`${API_BASE_URL}users`,{
+        fetch(`http://localhost:3000/users`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -42,6 +42,8 @@ function SignUpForm(props) {
             localStorage.setItem("token", data.jwt)
             props.handleLogin(data.user)
         })
+        setName("")
+        setEmail("")
         setUsername("")
         setPassword("")
     }
