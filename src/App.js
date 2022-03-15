@@ -8,6 +8,7 @@ import Root from "./Root";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import Dashboard from "./components/Dashboard";
+import SinglePlaceMap from './components/Places/SinglePlaceMap';
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
                         <li><Link to='/login' className="nav-links-header">Log In</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
                         {/* <li><Link to='/dashboard' className="nav-links-header">Dashboard testMap</Link></li> */}
+                        <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
                       </ul>
 
                     )
@@ -92,6 +94,7 @@ function App() {
                     <Route exact path = '/login'element={<LoginForm handleLogin={handleLogin}/>}/>
                     <Route exact path = '/sign-up'element={<SignUpForm/>}/>
                     <Route exact path = '/dashboard'element={<Dashboard/>}/>
+                    <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>
                 </Routes>
               </div>
             </Router>
