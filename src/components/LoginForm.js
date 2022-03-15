@@ -3,61 +3,38 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { API_ROOT } from '../constants';
 
+import "../App.css"
+// import {handleLogin} from '../App'
+
 function LoginForm(props){
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleEmailChange = (ev) => {
+    setEmail(ev.target.value)
+  }
 
+  const handlePasswordChange = (ev) => {
+    setPassword(ev.target.value)
+  }
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault()
+
+    const request = {email, password}
+
+    try {
+    props.handleLogin(request); // send it to the function in App.js
+    navigate(`/dashboard`);
+    }catch {
+    setErrorMessage("Incorrect Login Details");
+    }
     
-    const handleEmailChange = (ev) => {
-        setEmail(ev.target.value)
-    }
-
-    const handlePasswordChange = (ev) => {
-        setPassword(ev.target.value)
-    }
-
-    const handleSubmit = (ev) => {
-        ev.preventDefault()
-        const request = {'email': email, 'password': password}
-
-        axios.post(`${API_ROOT}/user_token`,{auth: request})
-        .then(result =>{
-            console.log('Logging Sucess!')
-            localStorage.setItem("jwt", result.data.jwt)
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
-            navigate(`/dashboard`);
-        })
-        .catch(err => {
-            console.log("Cannot Log In:",err)
-        })
-        
-        // fetch(`http://localhost:3000/user_token`, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Accept": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         auth: {email, password}
-        //     })
-        // })
-        // .then(res => res.json())
-        // .then(data => {
-        //     if(data.error){
-        //         alert(data.error)
-        //     }else{
-        //         localStorage.setItem("token", data.jwt)
-        //         // props.handleLogin(data.user)
-        //         console.log("login sucess",data);
-        //         navigate(`/dashboard`);
-        //     }
-        // });
-        setEmail("");
-        setPassword("");
-        
-    }
+    setEmail("");
+    setPassword("");
+  }
     const formDivStyle = {
         margin: "auto",
         padding: "20px",
@@ -67,6 +44,9 @@ function LoginForm(props){
         <div>
             <div style={formDivStyle}>
             <h1>Log In</h1>
+            {
+                errorMessage && <p className='error-message'> Wrong Login Details</p>
+            }
             <form className="ui form" onSubmit={handleSubmit}>
                 <div className="field">
                     <label>Email</label>
