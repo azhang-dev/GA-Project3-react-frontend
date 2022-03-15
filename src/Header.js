@@ -10,7 +10,7 @@ import Dashboard from "./components/Dashboard";
 
 const headerStyle ={
     background: "black",
-    height: "15vh",
+    height: "8vh",
 }
 
 
@@ -18,20 +18,7 @@ const headerStyle ={
 function Header(props){
     return(
         <div style={headerStyle}>
-            <h1 style={{color:"white"}}>TRAVELOG</h1>
-            <Router>
-            {/* <button className="ui button" onClick={() => props.handleFormSwitch("singUp")}>Sign Up</button>
-            <button className="ui button" onClick={() => props.handleFormSwitch("login")}>Log In</button> */}
-            <Link to='/login'>Log In</Link>|
-            <Link to='/sign-up'>Sign Up</Link>|
-            <Link to='/dashboard'>TestTravelMap</Link>
-                <Routes>
-                    <Route exact path = '/'element={<Root/>}/>
-                    <Route exact path = '/login'element={<LoginForm/>}/>
-                    <Route exact path = '/sign-up'element={<SignUpForm/>}/>
-                    <Route exact path = '/dashboard'element={<Dashboard/>}/>
-                </Routes>
-            </Router>
+           
             {/* <button className="ui button" onClick={() => props.handleFormSwitch("login")}>TEST MAP</button> */}
         </div>
     )

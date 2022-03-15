@@ -1,56 +1,54 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import Header from './Header';
-import SignUpForm from './components/SignUpForm';
-import LoginForm from './components/LoginForm';
-import Dashboard from './components/Dashboard';
+import {HashRouter as Router, Route, Routes, Link} from 'react-router-dom'
+import Root from "./Root";
+import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
+import Dashboard from "./components/Dashboard";
+
+
+
+const headerStyle ={
+    background: "black",
+    height: "8vh",
+}
+
 
 function App() {
-  const [user, setUser] = useState({})
-  // const [form, setForm] = useState("")
+  const [currentUser, setCurrentUser] = useState("")
+  
+  
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    axios.defaults.headers.common['Authorization'] = undefined
+  }
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    if(token){
-      fetch(`http://localhost:3000/auto_login`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        setUser(data)
-        //console.log(data)
-      })
-    }
-  },[])
-
-  // const handleLogin = (user) => {
-  //   setUser(user)
-  // }
-
-  // const handleFormSwitch = (input) => {
-  //   setForm(input)
-  // }
-
-  // const renderForm = () => {
-  //   switch(form){
-  //     case "login":
-  //       return <LoginForm handleLogin={handleLogin}/>
-  //       break;
-  //     default:
-  //       return <SignUpForm handleLogin={handleLogin}/>
-  //   }
-  // }
   return (
-    <div className="App">
-      <Header className="App-header" 
-      // handleFormSwitch={handleFormSwitch}
-      />
-      {/* {
-        renderForm()
-      } */}
-    </div>
+   <div style={headerStyle}>
+            <h1 style={{color:"white"}}>TRAVELOG</h1>
+            <Router>
+              <header>
+                <ul>
+                  <li>Welcome</li>
+                  <li><Link to='/login'>Log In</Link></li>
+                  <li><Link onClick = {handleLogout}to='/login'>Log In</Link></li>
+                  
+                </ul>
+
+              </header>
+            
+            <Link to='/login'>Log In</Link>|
+            <Link to='/sign-up'>Sign Up</Link>|
+            <Link to='/dashboard'>TestTravelMap</Link>
+                <Routes>
+                    <Route exact path = '/'element={<Root/>}/>
+                    <Route exact path = '/login'element={<LoginForm/>}/>
+                    <Route exact path = '/sign-up'element={<SignUpForm/>}/>
+                    <Route exact path = '/dashboard'element={<Dashboard/>}/>
+                </Routes>
+            </Router>
+            {/* <button className="ui button" onClick={() => props.handleFormSwitch("login")}>TEST MAP</button> */}
+        </div>
   );
 }
 

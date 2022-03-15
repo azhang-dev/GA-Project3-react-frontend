@@ -1,42 +1,61 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { API_ROOT } from '../constants';
 
 function LoginForm(props){
-    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     const navigate = useNavigate();
 
-    // const API_BASE_URL =  "http://localhost:3000/"
-    const handleUsernameChange = (evt) => {
-        setUsername(evt.target.value)
+    
+    const handleEmailChange = (ev) => {
+        setEmail(ev.target.value)
     }
 
-    const handlePasswordChange = (evt) => {
-        setPassword(evt.target.value)
+    const handlePasswordChange = (ev) => {
+        setPassword(ev.target.value)
     }
 
-    const handleSubmit = (evt) => {
-        evt.preventDefault()
-        fetch(`http://localhost:3000/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                username,
-                password
-            })
+    const handleSubmit = (ev) => {
+        ev.preventDefault()
+        const request = {'email': email, 'password': password}
+
+        axios.post(`${API_ROOT}/user_token`,{auth: request})
+        .then(result =>{
+            console.log('Logging Sucess!')
+            localStorage.setItem("jwt", result.data.jwt)
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
+            navigate(`/dashboard`);
         })
-        .then(resp => resp.json())
-        .then(data => {
-            localStorage.setItem("token", data.jwt)
-            props.handleLogin(data.user)
-        });
-        setUsername("");
+        .catch(err => {
+            console.log("Cannot Log In:",err)
+        })
+        
+        // fetch(`http://localhost:3000/user_token`, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Accept": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //         auth: {email, password}
+        //     })
+        // })
+        // .then(res => res.json())
+        // .then(data => {
+        //     if(data.error){
+        //         alert(data.error)
+        //     }else{
+        //         localStorage.setItem("token", data.jwt)
+        //         // props.handleLogin(data.user)
+        //         console.log("login sucess",data);
+        //         navigate(`/dashboard`);
+        //     }
+        // });
+        setEmail("");
         setPassword("");
-        navigate(`/dashboard`);
         
     }
     const formDivStyle = {
@@ -50,8 +69,8 @@ function LoginForm(props){
             <h1>Log In</h1>
             <form className="ui form" onSubmit={handleSubmit}>
                 <div className="field">
-                    <label>Username</label>
-                    <input value={username} onChange={handleUsernameChange} type="text" placeholder="username"/>
+                    <label>Email</label>
+                    <input value={email} onChange={handleEmailChange} type="text" placeholder="email"/>
                 </div>
                 <div className="field">
                     <label>Password</label>
