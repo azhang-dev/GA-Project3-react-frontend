@@ -33,6 +33,7 @@ function App() {
     })
     .catch(err => console.log("no current user",err))
   }
+ 
 
   const handleLogin = (request) => {
     return axios.post(`${API_ROOT}/user_token`,{auth: request})
@@ -49,7 +50,8 @@ function App() {
   }
   
   const handleLogout = () => {
-    setCurrentUser("")
+    setCurrentUser(undefined);
+    console.log('Logged Out-user:',currentUser);
     localStorage.removeItem("jwt");
     axios.defaults.headers.common['Authorization'] = undefined
   }
@@ -66,21 +68,19 @@ function App() {
                     ?
                     (
                       <ul>
-                        <li>Welcome</li>
-                        <li><Link to='/login' className="nav-links-header">Log In</Link></li>
+                        <li>Welcome! {currentUser.name}</li>
+                        <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
-                        {/* <li><Link to='/dashboard' className="nav-links-header">Dashboard testMap</Link></li> */}
                         <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
                       </ul>
 
                     )
                     :
                     (
-                      <ul>
-                        
+                      <ul> 
                         <li><Link to='/login' className="nav-links-header">Log In</Link></li>
-                        <li><Link to='/dashboard' className="nav-links-header">Dashboard testMap</Link></li>
-                        <Link to='/sign-up'>Sign Up</Link>
+                        <li><Link to='/sign-up' className="nav-links-header">Sign Up</Link></li>
+                        <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
                       </ul>
                     )
                   }

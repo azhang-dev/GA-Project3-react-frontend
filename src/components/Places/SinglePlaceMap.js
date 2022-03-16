@@ -5,24 +5,15 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/a
 import axios from "axios";
 // import 'dotenv/config'
 
-import usePlacesAutocomplete, {
-    getGeocode,
-    getLatLng,
-} from "use-places-autocomplete";
-
-import {
-    Combobox,
-    ComboboxInput,
-    ComboboxPopover,
-    ComboboxList,
-    ComboboxOption,
-} from "@reach/combobox";
+import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
 import { formatRelative } from "date-fns";
 import "@reach/combobox/styles.css";
-import "../../stylesheets/placeMap.css"
-
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
+
+import "../../stylesheets/placeMap.css"
+
 //////////IMPORTS
 
 
@@ -147,10 +138,8 @@ function Search() {
                 <ComboboxPopover>
                     <ComboboxList className="search-sugestion-text">
                         {status === "OK" && data.map(({place_id, description}) => {
-                        
                             return (<ComboboxOption key={place_id} value={description} />)
-                        }
-                        )}
+                        })}
                     </ComboboxList>
                 </ComboboxPopover>
             </Combobox>
