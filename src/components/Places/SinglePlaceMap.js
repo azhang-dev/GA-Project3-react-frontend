@@ -33,24 +33,29 @@ export default function SinglePlaceMap() {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries,
     });
+    const [markers, setMarkers] = React.useState([]);
 
     if(loadError) return "Error loading maps";
     if(!isLoaded) return "Loading Maps";
 
-    const renderMap = () => {
-
-    }
 
     return <div>
         <GoogleMap 
         mapContainerStyle={mapContainerStyle}
-        zoom ={8}
+        zoom ={10}
         center={center}
         options={options}
         onClick = {(event) => {
-            console.log(event);
+            setMarkers(current => [...current,{
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng(),
+                time: new Date(),
+            }])
+            // console.log(event);
         }}
-        ></GoogleMap>
+        >
+            {markers.map(marker => <Marker key={marker.time.toISOString()} position={{lat: marker.lat, lng:marker.lng }}/>)}
+        </GoogleMap>
     </div>;
 }
 
