@@ -7,3 +7,6 @@
     max-width: 400px;
     z-index: 10;
 }
+.search-suggestion-text{
+    color:black;
+}
