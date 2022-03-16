@@ -1,13 +1,30 @@
 import React from "react";
 import {GoogleMap, useLoadScript, Marker, InfoWindow, useJsApiLoader, LoadScript } from "@react-google-maps/api";
 import {GOOGLE_MAP_API_KEY} from "../../mapApiBaseUrl";
-import { API_ROOT } from '../../constants';
+// import { API_ROOT } from '../../constants';
 import axios from "axios";
 import {formatRelative} from "date-fns"
 // import 'dotenv/config'
 
+import usePlaceAutocomplete, {
+    getGeocode,
+    getLatLng,
+} from "use-places-autocomplete";
+
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
+import "../../stylesheets/placeMap.css"
+
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
+//////////IMPORTS
+
 
 const libraries = ["places"];
 
@@ -59,6 +76,9 @@ export default function SinglePlaceMap() {
 
 
     return <div>
+
+        <Search />
+
         <GoogleMap 
             mapContainerStyle={mapContainerStyle}
             zoom ={10}
@@ -89,3 +109,40 @@ export default function SinglePlaceMap() {
     </div>;
 }
 
+function Search(){
+    const {
+        ready, 
+        value, 
+        suggestions: {status,data}, 
+        setValue, 
+        clearSuggestions,
+    } = usePlaceAutocomplete({
+        requestOptions: {
+            location: {lat: () => -12.046373, lng: () => -77.042755},
+            radius: 200 * 1000, // * 1000 because its in meters 
+        },
+    });
+    
+    return (
+        <div className="search-box">
+            <Combobox 
+                onSelect={(address) => {
+                    console.log(address);
+                }}
+            >
+                <ComboboxInput value={value} onChange={(e) => {
+                    console.log(e.target.value)   
+                    setValue(e.target.value);
+                }}
+                disabled={!ready}
+                placeholder="Enter an address"
+                />
+                <ComboboxPopover>
+                    {status === "OK" && data.map(({id, description}) => (
+                    <ComboboxOption key={id} value={description} />
+                    ))}
+                </ComboboxPopover>
+            </Combobox>
+        </div>
+    )
+}
