@@ -8,6 +8,7 @@ import Root from "./Root";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import Dashboard from "./components/Dashboard";
+import MyProfile from './Pages/MyProfile';
 import SinglePlaceMap from './components/Places/SinglePlaceMap';
 
 
@@ -69,6 +70,7 @@ function App() {
                     (
                       <ul>
                         <li>Welcome! {currentUser.name}</li>
+                        <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
                         <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
                         <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
@@ -93,6 +95,7 @@ function App() {
                     <Route exact path = '/'element={<Root/>}/>
                     <Route exact path = '/login'element={<LoginForm handleLogin={handleLogin}/>}/>
                     <Route exact path = '/sign-up'element={<SignUpForm/>}/>
+                    <Route exact path = '/profile'element={<MyProfile/>}/>
                     <Route exact path = '/dashboard'element={<Dashboard/>}/>
                     <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>
                 </Routes>
