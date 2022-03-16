@@ -60,6 +60,10 @@ export default function SinglePlaceMap() {
     const onMapLoad = React.useCallback((map) => {
         mapRef.current = map;
     }, []);
+    const panTo = React.useCallback(({lat, lng}) => {
+        mapRef.current.panTo({lat, lng});
+        mapRef.current.setZoom(14);
+    }, []);
 
 
     if(loadError) return "Error loading maps";

@@ -30,9 +30,8 @@ function MyProfile(){
           <h1>My Profile</h1>
           <div className='profile-container'>
               <h3>{currentUser.name}</h3>
-              <p>profile details here</p>
+              <p>Your Account Details:</p>
               <p>Email: {currentUser.email}</p>
-
           </div>
       </div>
   )

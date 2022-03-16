@@ -26,10 +26,10 @@ function LoginForm(props){
     const request = {email, password}
 
     try {
-    props.handleLogin(request); // send it to the function in App.js
-    navigate(`/dashboard`);
+      props.handleLogin(request); // send it to the function in App.js
+      navigate(`/dashboard`);
     }catch {
-    setErrorMessage("Incorrect Login Details");
+      setErrorMessage("Incorrect Login Details");
     }
     
     setEmail("");
@@ -57,7 +57,7 @@ function LoginForm(props){
                     <input value={password} onChange={handlePasswordChange} type="password" placeholder="password"/>
                 </div>
                 
-                <button className="ui button" type="submit">Submit</button>
+                <button className="ui button" type="submit">Login</button>
             </form>
         </div>
         </div>
