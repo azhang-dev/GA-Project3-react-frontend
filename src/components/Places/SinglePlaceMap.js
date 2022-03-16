@@ -1,8 +1,9 @@
 import React from "react";
-import {GoogleMap, useLoadScript, Marker, InfoWindow, useJsApiLoader } from "@react-google-maps/api";
+import {GoogleMap, useLoadScript, Marker, InfoWindow, useJsApiLoader, LoadScript } from "@react-google-maps/api";
 import {GOOGLE_MAP_API_KEY} from "../../mapApiBaseUrl";
 import { API_ROOT } from '../../constants';
 import axios from "axios";
+// import 'dotenv/config'
 
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
@@ -21,11 +22,14 @@ const center = {
 
 const options ={
     styles: mapStyles,
+    disableDefaultUI: true, 
+    zoomControl: true,
 }
 
+console.log("key:",process.env)
 
 export default function SinglePlaceMap() {
-    const {isLoaded, loadError} = useJsApiLoader({
+    const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries,
     });
@@ -43,6 +47,9 @@ export default function SinglePlaceMap() {
         zoom ={8}
         center={center}
         options={options}
+        onClick = {(event) => {
+            console.log(event);
+        }}
         ></GoogleMap>
     </div>;
 }
