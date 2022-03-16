@@ -12,7 +12,7 @@ import "@reach/combobox/styles.css";
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
 
-import "../../stylesheets/placeMap.css"
+import "./placeMap.css"
 
 //////////IMPORTS
 
@@ -75,7 +75,7 @@ export default function SinglePlaceMap() {
         <div>
 
             <Search panTo={panTo}/>
-
+            <Locate panTo={panTo}/>
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle}
                 zoom ={10}
@@ -107,6 +107,20 @@ export default function SinglePlaceMap() {
     );
 }
 
+function Locate({panTo}) {
+    return (
+        <button className="locate" onClick={() => { 
+            console.log("current location button clicked");                                         
+            navigator.geolocation.getCurrentPosition(
+                (position) => { console.log ("geolocation position:",position)}, 
+                () => null // no error handling needed -null
+            ); //getCurrentPosition(sucess,error,options)
+        }}>
+            <img src="./images/location.png" alt="current location icon" />
+        </button>
+    );
+}
+
 function Search({panTo}) {
     const {
         ready, 
@@ -124,6 +138,8 @@ function Search({panTo}) {
     return (
         <div className="search-box">
             <Combobox onSelect={ async (address) => {
+                setValue(address, false); // sets the selected address to state and in the searchbox
+                clearSuggestions()
                 try {
                     const results = await getGeocode({address});
                     const {lat, lng} = await getLatLng(results[0]);// converting the getGeocode(address) to lat and lng coordinates
