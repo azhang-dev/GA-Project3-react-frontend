@@ -60,6 +60,7 @@ export default function SinglePlaceMap() {
     const onMapLoad = React.useCallback((map) => {
         mapRef.current = map;
     }, []);
+
     const panTo = React.useCallback(({lat, lng}) => {
         mapRef.current.panTo({lat, lng});
         mapRef.current.setZoom(14);
@@ -73,7 +74,7 @@ export default function SinglePlaceMap() {
     return (    
         <div>
 
-            <Search />
+            <Search panTo={panTo}/>
 
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle}
@@ -106,7 +107,7 @@ export default function SinglePlaceMap() {
     );
 }
 
-function Search() {
+function Search({panTo}) {
     const {
         ready, 
         value, 
@@ -125,7 +126,8 @@ function Search() {
             <Combobox onSelect={ async (address) => {
                 try {
                     const results = await getGeocode({address});
-                    const {lat, lng} = await getLatLng(results[0]);
+                    const {lat, lng} = await getLatLng(results[0]);// converting the getGeocode(address) to lat and lng coordinates
+                    panTo({lat, lng});// reposition the map given from panTo(), lat, lng given from getLatLng
                     // console.log(results[0]);
                     console.log(`lat: ${lat},lng: ${lng}`);
                 } catch(err){
