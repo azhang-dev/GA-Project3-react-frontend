@@ -43,23 +43,23 @@ function App() {
   
   
 
-  const handleSignUp = (request) => {
+  // const handleSignUp = (request) => {
   
-    return axios.post(`${API_ROOT}/user/create`,request)
-    .then(result =>{
-      console.log('SignUp Sucess!',result);
-      localStorage.setItem("user", result.data);
-      setCurrentUser({
-        name: result.data.name,
-        email: result.data.email,
-        password: result.data.password
-      })
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
-    })
-    .catch(err => {
-        console.log("Cannot SignUp:",err);
-    })
-  }
+  //   return axios.post(`${API_ROOT}/user/create`,request)
+  //   .then(result =>{
+  //     console.log('SignUp Sucess!',result);
+  //     localStorage.setItem("user", result.data);
+  //     setCurrentUser({
+  //       name: result.data.name,
+  //       email: result.data.email,
+  //       password: result.data.password
+  //     })
+  //     axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
+  //   })
+  //   .catch(err => {
+  //       console.log("Cannot SignUp:",err);
+  //   })
+  // }
 
   const handleLogin = () => {
     // return axios.post(`${API_ROOT}/user_token`,{auth: request})
@@ -122,7 +122,7 @@ function App() {
                 <Routes>
                     <Route exact path = '/'element={<Root/>}/>
                     <Route exact path = '/login'element={<LoginForm />}/>
-                    <Route exact path = '/sign-up'element={<SignUpForm handleSignUp={handleSignUp}/>}/>
+                    <Route exact path = '/sign-up'element={<SignUpForm />}/>
                     <Route exact path = '/profile'element={<MyProfile/>}/>
                     <Route exact path = '/dashboard'element={<Dashboard />}/>
                     <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>

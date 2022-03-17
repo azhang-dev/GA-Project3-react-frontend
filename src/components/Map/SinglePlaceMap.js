@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from 'react';
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
 import axios from "axios";
 
 import LocationDetailsForm from "./LocationDetailsPopup/LocationDetailsForm";
+import LocationDetailsShowWindow from './LocationDetailsPopup/LocationDetailsShowWindow';
 
 import usePlacesAutocomplete, { getGeocode, getLatLng , getDetails} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
@@ -41,8 +42,8 @@ export default function SinglePlaceMap() {
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries,
     });
-    const [markers, setMarkers] = React.useState([]); // creates markers on the map
-    const [selected, setSelected] = React.useState(null); // clicking on marker -shows details of the current selected marker in a new state 
+    const [markers, setMarkers] = useState([]); // creates markers on the map
+    const [selected, setSelected] = useState(null); // clicking on marker -shows details of the current selected marker in a new state 
     ////^States
 
 
@@ -52,6 +53,9 @@ export default function SinglePlaceMap() {
             lng: event.latLng.lng(),
             time: new Date(),
         }])
+
+        // axios post to create a new location- to be able to pass marked location id to show pop up window with details.
+
         // console.log(event);
     },[])// avoids recreating the onclick markers on every single render
 
@@ -155,7 +159,7 @@ function LocationDetailsPopup(){
     return(
         <div>
             <LocationDetailsForm/>
-            
+            <LocationDetailsShowWindow/>
         </div>
     );
 }
