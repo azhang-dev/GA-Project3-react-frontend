@@ -13,7 +13,7 @@ export default function LocationDetailsForm () {
     date_visited: "",
     bucketlist: false,
     images: [],
-    notes: ""
+    note: ""
   })
 
     const handleInput = (ev) => {
@@ -29,8 +29,16 @@ export default function LocationDetailsForm () {
 
     }
 
-    const handleSubmit = (ev) => {
+    const handleSubmit = async (ev) => {
         ev.preventDefault();
+
+        try{
+            const res = await axios.patch(`${API_ROOT}/user/create`, values);
+            console.log("Submit Sucess!", res);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
+        }catch(err){
+            console.log("Error submitting form:", err)
+        }
 
         //axios patch (update)
     }
@@ -38,7 +46,7 @@ export default function LocationDetailsForm () {
     return(
 
         <div className='LocationDetailsFormContainer'>
-            <h3>Enter Location Details</h3>
+            <h3>Edit Location Details</h3>
             <form className='inputFormContainer' onSubmit={handleSubmit}>
                 
                 <input name="name" onChange={handleInput} type="text" placeholder="Name"/>

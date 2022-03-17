@@ -1,15 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import { API_ROOT } from '../../../constants';
 import "./LocationDetailsForm.css"
 
-export default function LocationDetailsShowWindow (props) {
-    const [selected, setSelected] = useState(props)
+export default function LocationDetailsShowWindow () {
+    // const [selected, setSelected] = useState(props)
+    const [location, setLocation] = useState({
+        name: "",
+        city: "",
+        country: "",
+        visited: false,
+        date_visited: "",
+        bucketlist: false,
+        images: [],
+        note: ""
+    })
 
-    const fetchLocation = async () => {
-        let token = "Bearer " + localStorage.getItem("jwt");
+    useEffect(() => {
+        getLocation();
+    }, [])
+
+    const getLocation = async () => {
+        // let token = "Bearer " + localStorage.getItem("jwt");
         try {
-            const res = await axios.get(`${API_ROOT}/location/${selected.id}`)
+            const res = await axios.get(`${API_ROOT}/locations/6`);
+            console.log("location:",res.data);
+            setLocation(res.data);
+            console.log("location:",location);
         }catch(err){
             console.log("Can't get Locations:", err)
         }
@@ -19,12 +36,12 @@ export default function LocationDetailsShowWindow (props) {
 
     return(
         <div className='LocationDetailsShowContainer'>
-            <h3>Location Name</h3>
-            <p>City: </p>
-            <p>Country: </p>
-            <p>Date Visited: </p>
-            <p>Images: </p>
-            <p>Notes: </p>
+            <h3>{location.name} </h3>
+            <p>City: {location.city} </p>
+            <p>Country: {location.country} </p>
+            <p>Date Visited: {location.date_visited}</p>
+            <p>Images: {location.images}</p>
+            <p>Notes: {location.note}</p>
         </div>
     )
 

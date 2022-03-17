@@ -7,7 +7,7 @@ import LocationDetailsShowWindow from './LocationDetailsPopup/LocationDetailsSho
 
 import usePlacesAutocomplete, { getGeocode, getLatLng , getDetails} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
-import { formatRelative } from "date-fns";
+import { formatRelative, set } from "date-fns";
 import "@reach/combobox/styles.css";
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
@@ -65,14 +65,15 @@ export default function SinglePlaceMap() {
     // const handleWantToVisitClick = (ev) => {
     //     console.log("want to visit button clicked")
     // }
-    const handleSaveMarkerClick = (ev) => {
-        
+    const handleEditMarkerClick = (ev) => {
+        setSelected(selected);
         console.log("Save marker clicked")
     }
     const handleDeleteMarkerClick = (ev) => {
         const keptMarkers = markers.filter(m => m !== selected);
         setMarkers(keptMarkers);
         setSelected(null);
+        
         console.log("delete marker clicked")
     }
 
@@ -96,7 +97,7 @@ export default function SinglePlaceMap() {
 
             <Search panTo={panTo}/>
             <Locate panTo={panTo}/>
-            <LocationDetailsPopup/>
+            
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle}
                 zoom ={10}
@@ -110,22 +111,31 @@ export default function SinglePlaceMap() {
                     position={{lat: marker.lat, lng:marker.lng }}
                     onClick={() => {
                         setSelected(marker); // on click saves the selected marker to the selectedState
+                        
                     }}
                 />)}
 
                 {selected ? (
-                    <InfoWindow position={{lat: selected.lat, lng: selected.lng}} onCloseClick={() => {
-                        setSelected(null);// reset setSelected so inforWindow can be shown when selecting a new marker- toggling it on an off
-                    }}>
-                        <div>
-                            <h2>"Location Marked!"</h2>
-                            <p>Marked at: {formatRelative(selected.time, new Date())}</p>
-                            {/* <button onClick={handleVisitedClick}>Visited</button>
-                            <button onClick={handleWantToVisitClick}>Want To Visit</button> */}
-                            <button onClick={handleSaveMarkerClick}>Save Marker-add details</button>
-                            <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
-                        </div>
-                    </InfoWindow>) : null}
+                    <div>
+                        <InfoWindow position={{lat: selected.lat, lng: selected.lng}} onCloseClick={() => {
+                            setSelected(null);// reset setSelected so inforWindow can be shown when selecting a new marker- toggling it on an off
+                        }}>
+                            <div>
+                                <h2>"Location Marked!"</h2>
+                                <p>Marked at: {formatRelative(selected.time, new Date())}</p>
+                                {/* <button onClick={handleVisitedClick}>Visited</button>
+                                <button onClick={handleWantToVisitClick}>Want To Visit</button> */}
+                                <button onClick={handleEditMarkerClick}>Edit details</button>
+                                <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
+                            </div>
+                            
+                        </InfoWindow>
+                        <LocationDetailsForm/>
+                        <LocationDetailsShowWindow/>
+                        
+                    </div>
+                    
+                    ) : null}
             
             </GoogleMap>
             
@@ -154,15 +164,21 @@ function Locate({panTo}) {
     );
 }
 
-function LocationDetailsPopup(){
-
-    return(
-        <div>
-            <LocationDetailsForm/>
-            <LocationDetailsShowWindow/>
-        </div>
-    );
-}
+// function LocationDetailsPopup(selected){
+    
+//     return(
+//         <div>
+//             {
+//                 selected !== null
+//                 ?
+//                 (<LocationDetailsForm/>)
+//                 :
+//                 null
+//                 }
+//             {/* <LocationDetailsShowWindow/> */}
+//         </div>
+//     );
+// }
 
 function Search({panTo}) {
     const {
