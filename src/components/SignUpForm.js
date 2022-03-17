@@ -33,7 +33,7 @@ function SignUpForm(props) {
         console.log("request:", name, email,password);
         try{
             props.handleSignUp(request);
-            // navigate('/dashboard');
+            navigate('/dashboard');
         }catch(err){
             console.log("Error Signing Up:", err)
         }

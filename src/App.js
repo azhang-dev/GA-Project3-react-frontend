@@ -9,7 +9,7 @@ import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import Dashboard from "./components/Dashboard";
 import MyProfile from './Pages/MyProfile';
-import SinglePlaceMap from './components/Places/SinglePlaceMap';
+import SinglePlaceMap from './components/Map/SinglePlaceMap';
 const user = {
     name: "",
     email: "",
@@ -49,10 +49,14 @@ function App() {
   
     return axios.post(`${API_ROOT}/user/create`,request)
     .then(result =>{
-      console.log('SignUp Sucess!',result)
-      localStorage.setItem("user", result.data)
-      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
-      // handleLogin();
+      console.log('SignUp Sucess!',result);
+      localStorage.setItem("user", result.data);
+      setCurrentUser({
+        name: result.data.name,
+        email: result.data.email,
+        password: result.data.password
+      })
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
     })
     .catch(err => {
         console.log("Cannot SignUp:",err);
@@ -98,7 +102,7 @@ function App() {
                         <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
                         <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
-                        <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
+                        {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
 
                     )
@@ -107,7 +111,7 @@ function App() {
                       <ul> 
                         <li><Link to='/login' className="nav-links-header">Log In</Link></li>
                         <li><Link to='/sign-up' className="nav-links-header">Sign Up</Link></li>
-                        <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li>
+                        {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
                     )
                   }

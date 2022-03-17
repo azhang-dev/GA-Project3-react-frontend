@@ -1,35 +1,47 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { API_ROOT } from '../constants';
+import SinglePlaceMap from './Map/SinglePlaceMap';
+import './Dashboard.css'
+// const user = {
+//     name: "",
+//     email: "",
+//     password: "",
+//   }
+function Dashboard(props){
 
-function Dashboard(){
- let [currentUser, setCurrentUser] = useState("")
+
+
+// useEffect(() => {
+//   checkLogin()
+// }, [])
+//  let [currentUser, setCurrentUser] = useState(user)
   
-  setCurrentUser = () => {
-    let token = "Bearer " + localStorage.getItem("jwt");
-    const res = axios.get(`${API_ROOT}/users/current`, {
-      headers: {
-        'Authorization' : token
-      }
-    })
-    .then(res => {
-      console.log("current user:", res)
-      setCurrentUser(res)
-    })
-    .catch(err => console.log("no current user",err))
-  }
+//   setCurrentUser = () => {
+//     let token = "Bearer " + localStorage.getItem("jwt");
+//     const res = axios.get(`${API_ROOT}/users/current`, {
+//       headers: {
+//         'Authorization' : token
+//       }
+//     })
+//     .then(res => {
+//       console.log("current user:", res)
+//       setCurrentUser(  
+//         {name: res.data.name,
+//         email: res.data.email,
+//         password: res.data.password})
+//     })
+//     .catch(err => console.log("no current user",err))
+//   }
 
-  const formDivStyle = {
-      margin: "auto",
-      padding: "20px",
-      width: "80%"
-  }
+
+ 
   return(
-      <div style={formDivStyle}>
-          <h1>DASHBOARD</h1>
+      <div>
+          <h1 className='page-title'>DASHBOARD</h1>
           <div className='map-container'>
-              <p>map here</p>
+              <SinglePlaceMap />
           </div>
       </div>
   )

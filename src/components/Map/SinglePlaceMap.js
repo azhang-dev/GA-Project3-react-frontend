@@ -5,7 +5,7 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/a
 import axios from "axios";
 // import 'dotenv/config'
 
-import usePlacesAutocomplete, { getGeocode, getLatLng } from "use-places-autocomplete";
+import usePlacesAutocomplete, { getGeocode, getLatLng , getDetails} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
 import { formatRelative } from "date-fns";
 import "@reach/combobox/styles.css";
@@ -25,8 +25,8 @@ const mapContainerStyle = {
 };
 
 const center = {
-    lat: -12.046373,
-    lng: -77.042755,
+    lat: -33.868820,
+    lng: 151.209290,
 }
 
 const options ={
@@ -48,13 +48,17 @@ export default function SinglePlaceMap() {
 
 
     const onMapClick = React.useCallback((event) => {
-            setMarkers(current => [...current,{
-                lat: event.latLng.lat(),
-                lng: event.latLng.lng(),
-                time: new Date(),
-            }])
-            // console.log(event);
+        setMarkers(current => [...current,{
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng(),
+            time: new Date(),
+        }])
+        // console.log(event);
     },[])// avoids recreating the onclick markers on every single render
+
+    const handleDeleteMarkerClick = (ev) => {
+        console.log("delete marker clicked")
+    }
 
     const mapRef = React.useRef(); // retain state without a rerender
     const onMapLoad = React.useCallback((map) => {
@@ -63,7 +67,7 @@ export default function SinglePlaceMap() {
 
     const panTo = React.useCallback(({lat, lng}) => {
         mapRef.current.panTo({lat, lng});
-        mapRef.current.setZoom(14);
+        mapRef.current.setZoom(16);
     }, []);
 
 
@@ -99,6 +103,9 @@ export default function SinglePlaceMap() {
                         <div>
                             <h2>"Example: Location Marked!"</h2>
                             <p>Marked at: {formatRelative(selected.time, new Date())}</p>
+                            <button>visited</button>
+                            <button>want to visit</button>
+                            <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                         </div>
                     </InfoWindow>) : null}
             
@@ -112,7 +119,13 @@ function Locate({panTo}) {
         <button className="locate" onClick={() => { 
             console.log("current location button clicked");                                         
             navigator.geolocation.getCurrentPosition(
-                (position) => { console.log ("geolocation position:",position)}, 
+                (position) => { 
+                    panTo({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    })
+                    console.log ("geolocation position:",position)
+                }, 
                 () => null // no error handling needed -null
             ); //getCurrentPosition(sucess,error,options)
         }}>
@@ -136,16 +149,20 @@ function Search({panTo}) {
     });
     
     return (
-        <div className="search-box">
+        <div className="search">
             <Combobox onSelect={ async (address) => {
                 setValue(address, false); // sets the selected address to state and in the searchbox
                 clearSuggestions()
                 try {
                     const results = await getGeocode({address});
+                    console.log(results[0]); // logging info from searched address
+                    console.log("info", results[0].address_components[3]);
                     const {lat, lng} = await getLatLng(results[0]);// converting the getGeocode(address) to lat and lng coordinates
-                    panTo({lat, lng});// reposition the map given from panTo(), lat, lng given from getLatLng
-                    // console.log(results[0]);
                     console.log(`lat: ${lat},lng: ${lng}`);
+                    // const {address_components} = await getDetails(results[0]);// get details from searched suggestion
+                    // console.log(`address_components: ${address_components}`); // logging info from searched address
+                    panTo({lat, lng});// reposition the map given from panTo(), lat, lng given from getLatLng
+                    
                 } catch(err){
                     console.log("error:",err)
                 }
@@ -157,8 +174,8 @@ function Search({panTo}) {
                     disabled={!ready}
                     placeholder="Enter an address"
                 />
-                <ComboboxPopover>
-                    <ComboboxList className="search-sugestion-text">
+                <ComboboxPopover className="search-sugestion-text">
+                    <ComboboxList>
                         {status === "OK" && data.map(({place_id, description}) => {
                             return (<ComboboxOption key={place_id} value={description} />)
                         })}

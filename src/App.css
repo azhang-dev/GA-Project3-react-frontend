@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   text-align: center;
+  color:black;
 }
 
 .App {
@@ -41,3 +42,4 @@ li {
 .error-message{
   color:red;
 }
+
