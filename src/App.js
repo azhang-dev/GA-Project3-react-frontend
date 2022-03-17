@@ -19,28 +19,27 @@ const user = {
 function App() {
   let [currentUser, setCurrentUser] = useState(user);
 
-  // useEffect(() => {
-  //   checkLogin()
-  // }, [])
+  useEffect(() => {
+    checkLogin()
+  }, [])
   
   const checkLogin = () => {
     let token = localStorage.getItem("jwt");
+    if(token){
 
-    //TODO check that token is not null before doing a request
-    axios.get(`${API_ROOT}/users/current`, {
-      headers: {
-        'Authorization' : "Bearer " +  token,
-      }
-    })
-    .then(res => {
-      console.log("current user:", res.data)
-      setCurrentUser({
-        name: res.data.name,
-        email: res.data.email,
-        password: res.data.password
-      });
-    })
-    .catch(err => console.log("no current user",err))
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      //TODO check that token is not null before doing a request
+      axios.get(`${API_ROOT}/users/current`)
+      .then(res => {
+        console.log("current user:", res.data)
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
+          password: res.data.password
+        });
+      })
+      .catch(err => console.log("no current user",err))
+    }// if(token)
   }
   
   
@@ -68,7 +67,6 @@ function App() {
     .then(result =>{
       console.log('Logging Sucess!',result)
       localStorage.setItem("jwt", result.data.jwt)
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.jwt;
       checkLogin();
       //TODO customize knock response to include current user oject - same data from line 24
     })
@@ -89,7 +87,7 @@ function App() {
    <div className='App-header'>
             <Router>
               <header className='header-container'>
-                <h1 style={{color:"white"}}>TRAVELOG</h1>
+                <Link to='/' className='website-logo'>TRAVELOG</Link>
                 <nav>
                   {
                     currentUser && currentUser.name

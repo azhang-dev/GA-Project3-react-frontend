@@ -56,7 +56,16 @@ export default function SinglePlaceMap() {
         // console.log(event);
     },[])// avoids recreating the onclick markers on every single render
 
+    const handleVisitedClick = (ev) => {
+        console.log("visited button clicked")
+    }
+    const handleWantToVisitClick = (ev) => {
+        console.log("want to visit button clicked")
+    }
     const handleDeleteMarkerClick = (ev) => {
+        const keptMarkers = markers.filter(m => m !== selected);
+        setMarkers(keptMarkers);
+        setSelected(null);
         console.log("delete marker clicked")
     }
 
@@ -103,8 +112,8 @@ export default function SinglePlaceMap() {
                         <div>
                             <h2>"Example: Location Marked!"</h2>
                             <p>Marked at: {formatRelative(selected.time, new Date())}</p>
-                            <button>visited</button>
-                            <button>want to visit</button>
+                            <button onClick={handleVisitedClick}>Visited</button>
+                            <button onClick={handleWantToVisitClick}>Want To Visit</button>
                             <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                         </div>
                     </InfoWindow>) : null}

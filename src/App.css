@@ -9,7 +9,12 @@
   text-align: center;
 }
 
-
+.website-logo{
+  color:white;
+  font-size: 30px;
+  text-decoration: none;
+  font-weight: bold;
+}
 .header-container {
   background-color: #282c34;
   height: "8vh";
