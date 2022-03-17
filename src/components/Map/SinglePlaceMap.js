@@ -1,9 +1,8 @@
 import React from "react";
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
-// import {GOOGLE_MAP_API_KEY} from "../../mapApiBaseUrl";
-// import { API_ROOT } from '../../constants';
 import axios from "axios";
-// import 'dotenv/config'
+
+import LocationDetailsForm from "./LocationDetailsPopup/LocationDetailsForm";
 
 import usePlacesAutocomplete, { getGeocode, getLatLng , getDetails} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
@@ -56,11 +55,15 @@ export default function SinglePlaceMap() {
         // console.log(event);
     },[])// avoids recreating the onclick markers on every single render
 
-    const handleVisitedClick = (ev) => {
-        console.log("visited button clicked")
-    }
-    const handleWantToVisitClick = (ev) => {
-        console.log("want to visit button clicked")
+    // const handleVisitedClick = (ev) => {
+    //     console.log("visited button clicked")
+    // }
+    // const handleWantToVisitClick = (ev) => {
+    //     console.log("want to visit button clicked")
+    // }
+    const handleSaveMarkerClick = (ev) => {
+        
+        console.log("Save marker clicked")
     }
     const handleDeleteMarkerClick = (ev) => {
         const keptMarkers = markers.filter(m => m !== selected);
@@ -89,6 +92,7 @@ export default function SinglePlaceMap() {
 
             <Search panTo={panTo}/>
             <Locate panTo={panTo}/>
+            <LocationDetailsPopup/>
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle}
                 zoom ={10}
@@ -110,15 +114,18 @@ export default function SinglePlaceMap() {
                         setSelected(null);// reset setSelected so inforWindow can be shown when selecting a new marker- toggling it on an off
                     }}>
                         <div>
-                            <h2>"Example: Location Marked!"</h2>
+                            <h2>"Location Marked!"</h2>
                             <p>Marked at: {formatRelative(selected.time, new Date())}</p>
-                            <button onClick={handleVisitedClick}>Visited</button>
-                            <button onClick={handleWantToVisitClick}>Want To Visit</button>
+                            {/* <button onClick={handleVisitedClick}>Visited</button>
+                            <button onClick={handleWantToVisitClick}>Want To Visit</button> */}
+                            <button onClick={handleSaveMarkerClick}>Save Marker-add details</button>
                             <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                         </div>
                     </InfoWindow>) : null}
             
             </GoogleMap>
+            
+
         </div>
     );
 }
@@ -140,6 +147,16 @@ function Locate({panTo}) {
         }}>
             <img src="./images/location.png" alt="current location icon" />
         </button>
+    );
+}
+
+function LocationDetailsPopup(){
+
+    return(
+        <div>
+            <LocationDetailsForm/>
+            
+        </div>
     );
 }
 

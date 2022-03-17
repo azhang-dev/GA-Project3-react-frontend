@@ -4,36 +4,59 @@ import { useNavigate } from 'react-router-dom'
 import { API_ROOT } from '../constants';
 
 import "../App.css"
-// import {handleLogin} from '../App'
+import { set } from 'date-fns';
+
 
 function LoginForm(props){
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  })
+  // const [email, setEmail] = useState("")
+  // const [password, setPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const navigate = useNavigate();
 
-  const handleEmailChange = (ev) => {
-    setEmail(ev.target.value)
+  const handleInput = (ev) => {
+    const {name, value} = ev.target
+    setUser({
+      ...user,
+      [name]: value
+    })
+    console.log(user);
   }
+  // const handleEmailChange = (ev) => {
+  //   setEmail(ev.target.value)
+  // }
 
-  const handlePasswordChange = (ev) => {
-    setPassword(ev.target.value)
-  }
+  // const handlePasswordChange = (ev) => {
+  //   setPassword(ev.target.value)
+  // }
 
-  const handleSubmit = (ev) => {
-    ev.preventDefault()
-
-    const request = {email, password}
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    console.log(user);
+    // const request = {user}
+    setUser({
+      email: "",
+      password: "",
+    });
 
     try {
-      props.handleLogin(request); // send it to the function in App.js
+      const res = await axios.post(`${API_ROOT}/user_token`, {auth: user})
+      console.log('Logging Sucess!',res);
+      // props.handleLogin(request); // send it to the function in App.js
+      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
+      localStorage.setItem("jwt", res.data.jwt)
       navigate(`/dashboard`);
-    }catch {
+    }catch(err){
       setErrorMessage("Incorrect Login Details");
-    }
-    
-    setEmail("");
-    setPassword("");
+      console.log("error message: cant log in",err)
+      // navigate(`/login`);
+    };
+   
+    // setEmail("");
+    // setPassword("");
   }
     const formDivStyle = {
         margin: "auto",
@@ -50,14 +73,14 @@ function LoginForm(props){
             <form className="ui form" onSubmit={handleSubmit}>
                 <div className="field">
                     <label>Email</label>
-                    <input value={email} onChange={handleEmailChange} type="text" placeholder="email"/>
+                    <input name="email" onChange={handleInput} type="text" placeholder="email"/>
                 </div>
                 <div className="field">
                     <label>Password</label>
-                    <input value={password} onChange={handlePasswordChange} type="password" placeholder="password"/>
+                    <input name="password" onChange={handleInput} type="password" placeholder="password"/>
                 </div>
                 
-                <button className="ui button" type="submit">Login</button>
+                <button className="ui button">Login</button>
             </form>
         </div>
         </div>

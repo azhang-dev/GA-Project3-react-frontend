@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './App.css';
 import { API_ROOT } from './constants';
-
 import {HashRouter as Router, Route, Routes, Link} from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import Root from "./Root";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
@@ -18,15 +18,14 @@ const user = {
 
 function App() {
   let [currentUser, setCurrentUser] = useState(user);
-
+  // const navigate = useNavigate();
   useEffect(() => {
     checkLogin()
   }, [])
   
   const checkLogin = () => {
     let token = localStorage.getItem("jwt");
-    if(token){
-
+    // if(token){
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       //TODO check that token is not null before doing a request
       axios.get(`${API_ROOT}/users/current`)
@@ -38,8 +37,8 @@ function App() {
           password: res.data.password
         });
       })
-      .catch(err => console.log("no current user",err))
-    }// if(token)
+      .catch(err => console.log("no  current user",err))
+    // }// if(token)
   }
   
   
@@ -62,17 +61,19 @@ function App() {
     })
   }
 
-  const handleLogin = (request) => {
-    return axios.post(`${API_ROOT}/user_token`,{auth: request})
-    .then(result =>{
-      console.log('Logging Sucess!',result)
-      localStorage.setItem("jwt", result.data.jwt)
-      checkLogin();
-      //TODO customize knock response to include current user oject - same data from line 24
-    })
-    .catch(err => {
-      console.log("Cannot Log In:",err);
-    })
+  const handleLogin = () => {
+    // return axios.post(`${API_ROOT}/user_token`,{auth: request})
+    // .then(result =>{
+    //   console.log('Logging Sucess!',result)
+    //   localStorage.setItem("jwt", result.data.jwt)
+    checkLogin();
+    //   // navigate(`/dashboard`);
+    //   //TODO customize knock response to include current user oject - same data from line 24
+    // })
+    // .catch(err => {
+    //   console.log("Cannot Log In:",err);
+    // })
+    
   }
   
   const handleLogout = () => {
@@ -107,7 +108,7 @@ function App() {
                     :
                     (
                       <ul> 
-                        <li><Link to='/login' className="nav-links-header">Log In</Link></li>
+                        <li><Link onClick = {checkLogin}  to='/login' className="nav-links-header">Log In</Link></li>
                         <li><Link to='/sign-up' className="nav-links-header">Sign Up</Link></li>
                         {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
@@ -120,10 +121,10 @@ function App() {
               <div>
                 <Routes>
                     <Route exact path = '/'element={<Root/>}/>
-                    <Route exact path = '/login'element={<LoginForm handleLogin={handleLogin}/>}/>
+                    <Route exact path = '/login'element={<LoginForm />}/>
                     <Route exact path = '/sign-up'element={<SignUpForm handleSignUp={handleSignUp}/>}/>
                     <Route exact path = '/profile'element={<MyProfile/>}/>
-                    <Route exact path = '/dashboard'element={<Dashboard/>}/>
+                    <Route exact path = '/dashboard'element={<Dashboard />}/>
                     <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>
                 </Routes>
               </div>
