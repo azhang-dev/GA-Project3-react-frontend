@@ -31,9 +31,9 @@ export default function LocationDetailsForm () {
 
     const handleSubmit = async (ev) => {
         ev.preventDefault();
-
+        console.log(values);
         try{
-            const res = await axios.patch(`${API_ROOT}/user/create`, values);
+            const res = await axios.post(`${API_ROOT}/locations`, values);
             console.log("Submit Sucess!", res);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
         }catch(err){

@@ -40,8 +40,8 @@ export default function LocationDetailsShowWindow () {
             <p>City: {location.city} </p>
             <p>Country: {location.country} </p>
             <p>Date Visited: {location.date_visited}</p>
-            <p>Images: {location.images}</p>
             <p>Notes: {location.note}</p>
+            <p>Images: {location.images}</p>
         </div>
     )
 
