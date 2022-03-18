@@ -24,7 +24,7 @@ export default function LocationDetailsShowWindow (props) {
     }, [])
 
     const getLocation = async () => {
-        console.log("selected",selected.selected.id);
+        console.log("getLocation selected",selected.selected.id);
 
         try {
             const selectedMarkerId = selected.selected.id;

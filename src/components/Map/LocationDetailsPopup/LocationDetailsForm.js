@@ -5,9 +5,10 @@ import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 import "./LocationDetailsForm.css"
 
 export default function LocationDetailsForm (props) {
-    const [editStatus, setEditStatus] = useState(true)
+    // const [editStatus, setEditStatus] = useState(true)
+    const [submitted, setSubmitted] = useState (false)
     const [selected, setSelected] = useState(props)
-    const [location, setlocation] = useState({
+    const [location, setLocation] = useState({
     name: "",
     city: "",
     country: "",
@@ -24,7 +25,7 @@ export default function LocationDetailsForm (props) {
 
     const handleInput = (ev) => {
         const {name, value} = ev.target
-        setlocation({
+        setLocation({
         ...location,
         [name]: value
         })
@@ -42,6 +43,8 @@ export default function LocationDetailsForm (props) {
             const res = await axios.post(`${API_ROOT}/locations`, location);
             console.log("Submit Sucess!", res);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
+            setLocation(res.data)
+            setSubmitted(true)
         }catch(err){
             console.log("Error submitting form:", err)
         }
@@ -49,16 +52,17 @@ export default function LocationDetailsForm (props) {
         //axios patch (update)
     }
 
-    const handleBackButton = (ev) => {
-        console.log("back button clicked")
-        setEditStatus(false);
-    }
+    // const handleBackButton = (ev) => {
+    //     console.log("back button clicked")
+    //     setEditStatus(false);
+    //     setLocation(selected)
+    // }
 
     return(
 
         <div>
             {
-                editStatus === true ? (
+                submitted !== true ? (
                     <div className='LocationDetailsFormContainer'>
                         <h3>Edit Location Details</h3>
                         <form className='inputFormContainer' onSubmit={handleSubmit}>
@@ -82,7 +86,7 @@ export default function LocationDetailsForm (props) {
 
                             <input name="note" onChange={(ev) => {uploadImage(ev.target.files)}} type="textfield" placeholder="Notes"/>
 
-                            <button>Back</button>
+                            {/* <button onClick={handleBackButton}>Back</button> */}
                             <button>Save</button>
                     
                         </form>
@@ -90,7 +94,10 @@ export default function LocationDetailsForm (props) {
                 )
                 :
                 (
-                    <LocationDetailsShowWindow selected={selected} editStatus={editStatus}/>
+                    <LocationDetailsShowWindow 
+                    // selected={selected} 
+                    // editStatus={editStatus}
+                    />
                 )
             }
         </div>
