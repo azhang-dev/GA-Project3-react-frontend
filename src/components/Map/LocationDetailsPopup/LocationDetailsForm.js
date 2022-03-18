@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import { API_ROOT } from '../../../constants';
+import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 import "./LocationDetailsForm.css"
 
-export default function LocationDetailsForm () {
-
-    const [values, setValues] = useState({
+export default function LocationDetailsForm (props) {
+    const [editStatus, setEditStatus] = useState(true)
+    const [selected, setSelected] = useState(props)
+    const [location, setlocation] = useState({
     name: "",
     city: "",
     country: "",
@@ -16,13 +18,17 @@ export default function LocationDetailsForm () {
     note: ""
   })
 
+    useEffect(() => {
+        setSelected(props);
+    }, [])
+
     const handleInput = (ev) => {
         const {name, value} = ev.target
-        setValues({
-        ...values,
+        setlocation({
+        ...location,
         [name]: value
         })
-        console.log(values);
+        console.log(location);
     }
 
     const uploadImage = (files) => {
@@ -31,9 +37,9 @@ export default function LocationDetailsForm () {
 
     const handleSubmit = async (ev) => {
         ev.preventDefault();
-        console.log(values);
+        console.log(location);
         try{
-            const res = await axios.post(`${API_ROOT}/locations`, values);
+            const res = await axios.post(`${API_ROOT}/locations`, location);
             console.log("Submit Sucess!", res);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
         }catch(err){
@@ -43,35 +49,52 @@ export default function LocationDetailsForm () {
         //axios patch (update)
     }
 
+    const handleBackButton = (ev) => {
+        console.log("back button clicked")
+        setEditStatus(false);
+    }
+
     return(
 
-        <div className='LocationDetailsFormContainer'>
-            <h3>Edit Location Details</h3>
-            <form className='inputFormContainer' onSubmit={handleSubmit}>
-                
-                <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
-            
-                <input name="city" onChange={handleInput} type="text" placeholder="City"/>
-         
-                <input name="Country" onChange={handleInput} type="text" placeholder="Country"/>
-           
-                <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
+        <div>
+            {
+                editStatus === true ? (
+                    <div className='LocationDetailsFormContainer'>
+                        <h3>Edit Location Details</h3>
+                        <form className='inputFormContainer' onSubmit={handleSubmit}>
+                            
+                            <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
+                        
+                            <input name="city" onChange={handleInput} type="text" placeholder="City"/>
+                    
+                            <input name="Country" onChange={handleInput} type="text" placeholder="Country"/>
+                    
+                            <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
 
-                <div>
-                    <input name="visited" onChange={handleInput} type="checkbox" placeholder="visted(change to icon button)"/>
-                    <label> Visited </label>
-                    <input name="bucketlist" onChange={handleInput} type="checkbox" placeholder="bucketlist(change to icon button)"/>
-                    <label> Want to visit</label>
-                </div>
-                
-                <input name="images" onChange={handleInput} type="file" placeholder="Images Cloudinary"/>
+                            <div>
+                                <input name="visited" onChange={handleInput} type="checkbox" placeholder="visted(change to icon button)"/>
+                                <label> Visited </label>
+                                <input name="bucketlist" onChange={handleInput} type="checkbox" placeholder="bucketlist(change to icon button)"/>
+                                <label> Want to visit</label>
+                            </div>
+                            
+                            <input name="images" onChange={handleInput} type="file" placeholder="Images Cloudinary"/>
 
-                <input name="note" onChange={(ev) => {uploadImage(ev.target.files)}} type="textfield" placeholder="Notes"/>
+                            <input name="note" onChange={(ev) => {uploadImage(ev.target.files)}} type="textfield" placeholder="Notes"/>
 
-                <button>Save</button>
-           
-            </form>
+                            <button>Back</button>
+                            <button>Save</button>
+                    
+                        </form>
+                    </div>
+                )
+                :
+                (
+                    <LocationDetailsShowWindow selected={selected} editStatus={editStatus}/>
+                )
+            }
         </div>
+        
     )
 
 

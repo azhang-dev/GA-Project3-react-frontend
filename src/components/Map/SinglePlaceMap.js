@@ -106,7 +106,7 @@ export default function SinglePlaceMap() {
             
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle}
-                zoom ={10}
+                zoom ={13}
                 center={center}
                 options={options}
                 onClick = {onMapClick}
@@ -136,7 +136,7 @@ export default function SinglePlaceMap() {
                             </div>
                             
                         </InfoWindow>
-                        <LocationDetailsForm selected={selected}/>
+                        {/* <LocationDetailsForm selected={selected}/> */}
                         <LocationDetailsShowWindow selected={selected}/>
                         
                     </div>
