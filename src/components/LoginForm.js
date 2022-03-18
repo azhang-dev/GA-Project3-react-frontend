@@ -12,9 +12,7 @@ function LoginForm(props){
     email: "",
     password: "",
   })
-  
-  // const [email, setEmail] = useState("")
-  // const [password, setPassword] = useState("")
+
   const [errorMessage, setErrorMessage] = useState("")
   const navigate = useNavigate();
 
@@ -26,14 +24,7 @@ function LoginForm(props){
     })
     console.log(user);
   }
-  // const handleEmailChange = (ev) => {
-  //   setEmail(ev.target.value)
-  // }
-
-  // const handlePasswordChange = (ev) => {
-  //   setPassword(ev.target.value)
-  // }
-
+ 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     console.log(user);
@@ -46,18 +37,14 @@ function LoginForm(props){
     try {
       const res = await axios.post(`${API_ROOT}/user_token`, {auth: user})
       console.log('Logging Sucess!',res);
-      // props.handleLogin(request); // send it to the function in App.js
+      props.checkLogin();
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
       localStorage.setItem("jwt", res.data.jwt)
       navigate(`/dashboard`);
     }catch(err){
       setErrorMessage("Incorrect Login Details");
       console.log("error message: cant log in",err)
-      // navigate(`/login`);
     };
-   
-    // setEmail("");
-    // setPassword("");
   }
     const formDivStyle = {
         margin: "auto",

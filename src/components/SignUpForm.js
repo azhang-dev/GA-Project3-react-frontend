@@ -46,7 +46,9 @@ function SignUpForm(props) {
             // props.handleSignUp(request);
             const res = await axios.post(`${API_ROOT}/user/create`, values);
             console.log('SignUp Sucess!',res);
+            setValues(res.data);
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
+            props.checkLogin();
             navigate('/dashboard');
         }catch(err){
             console.log("Error Signing Up:", err)

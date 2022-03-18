@@ -13,11 +13,12 @@ import SinglePlaceMap from './components/Map/SinglePlaceMap';
 const user = {
     name: "",
     email: "",
-    password: "",
   }
 
 function App() {
+
   let [currentUser, setCurrentUser] = useState(user);
+  let [userIsLoaded, setUserIsLoaded] = useState(false);
   // const navigate = useNavigate();
   useEffect(() => {
     checkLogin()
@@ -25,20 +26,22 @@ function App() {
   
   const checkLogin = () => {
     let token = localStorage.getItem("jwt");
-    // if(token){
+    if(token){
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      console.log("token", token, axios.defaults.headers.common );
       //TODO check that token is not null before doing a request
       axios.get(`${API_ROOT}/users/current`)
       .then(res => {
         console.log("current user:", res.data)
         setCurrentUser({
           name: res.data.name,
-          email: res.data.email,
-          password: res.data.password
+          email: res.data.email
         });
+        setUserIsLoaded(true);
       })
       .catch(err => console.log("no  current user",err))
-    // }// if(token)
+      
+    }// if(token)
   }
   
   
@@ -83,6 +86,9 @@ function App() {
     axios.defaults.headers.common['Authorization'] = ""
   }
 
+  if (userIsLoaded === false){
+    return <p>Loading...</p>
+  }
 
   return (
    <div className='App-header'>
@@ -103,12 +109,11 @@ function App() {
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
                         {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
-
                     )
                     :
                     (
                       <ul> 
-                        <li><Link onClick = {checkLogin}  to='/login' className="nav-links-header">Log In</Link></li>
+                        <li><Link to='/login' className="nav-links-header">Log In</Link></li>
                         <li><Link to='/sign-up' className="nav-links-header">Sign Up</Link></li>
                         {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
@@ -121,8 +126,8 @@ function App() {
               <div>
                 <Routes>
                     <Route exact path = '/'element={<Root/>}/>
-                    <Route exact path = '/login'element={<LoginForm />}/>
-                    <Route exact path = '/sign-up'element={<SignUpForm />}/>
+                    <Route exact path = '/login'element={<LoginForm checkLogin={checkLogin}/>} />
+                    <Route exact path = '/sign-up'element={<SignUpForm checkLogin={checkLogin}/>}/>
                     <Route exact path = '/profile'element={<MyProfile/>}/>
                     <Route exact path = '/dashboard'element={<Dashboard />}/>
                     <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>

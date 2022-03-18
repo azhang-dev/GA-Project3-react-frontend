@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from "@react-google-maps/api";
 import axios from "axios";
+import { API_ROOT } from '../../constants';
 
 import LocationDetailsForm from "./LocationDetailsPopup/LocationDetailsForm";
 import LocationDetailsShowWindow from './LocationDetailsPopup/LocationDetailsShowWindow';
@@ -15,7 +16,6 @@ import mapStyles from "./mapStyles";
 import "./placeMap.css"
 
 //////////IMPORTS
-
 
 const libraries = ["places"];
 
@@ -38,27 +38,45 @@ const options ={
 console.log("key:",process.env)
 
 export default function SinglePlaceMap() {
+
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         libraries,
     });
     const [markers, setMarkers] = useState([]); // creates markers on the map
+    const [seededMarkers, setSeededMarkers] = useState([
+
+    ]); // state for seeded markers on the map
     const [selected, setSelected] = useState(null); // clicking on marker -shows details of the current selected marker in a new state 
     ////^States
 
+    useEffect(() => {
+        getSeededMarkers();
+    },[])
+
+    const getSeededMarkers = async () => {
+        try{
+            const res = await axios.get(`${API_ROOT}/locations`);
+            console.log("Seeded Markers:", res.data);
+            // seededMarkers = res.data
+            setMarkers(res.data)
+        }catch(err){
+            console.log("Cannot get seeded Markers:", err)
+        }
+    }
 
     const onMapClick = React.useCallback((event) => {
         setMarkers(current => [...current,{
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
-            time: new Date(),
+            // created_at: new Date(),
         }])
 
         // axios post to create a new location- to be able to pass marked location id to show pop up window with details.
 
         // console.log(event);
     },[])// avoids recreating the onclick markers on every single render
-
+    
     // const handleVisitedClick = (ev) => {
     //     console.log("visited button clicked")
     // }
@@ -107,8 +125,8 @@ export default function SinglePlaceMap() {
                 onLoad={onMapLoad}
             >
                 {markers.map(marker => <Marker 
-                    key={marker.time.toISOString()} 
-                    position={{lat: marker.lat, lng:marker.lng }}
+                    key={marker.id} 
+                    position={{lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                     onClick={() => {
                         setSelected(marker); // on click saves the selected marker to the selectedState
                         
@@ -122,10 +140,10 @@ export default function SinglePlaceMap() {
                         }}>
                             <div>
                                 <h2>"Location Marked!"</h2>
-                                <p>Marked at: {formatRelative(selected.time, new Date())}</p>
+                                {/* <p>Marked at: {formatRelative(selected.created_at, new Date())}</p> */}
                                 {/* <button onClick={handleVisitedClick}>Visited</button>
                                 <button onClick={handleWantToVisitClick}>Want To Visit</button> */}
-                                <button onClick={handleEditMarkerClick}>Edit details</button>
+                                {/* <button onClick={handleEditMarkerClick}>Edit details</button> */}
                                 <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                             </div>
                             

@@ -3,8 +3,8 @@ import axios from "axios";
 import { API_ROOT } from '../../../constants';
 import "./LocationDetailsForm.css"
 
-export default function LocationDetailsShowWindow () {
-    // const [selected, setSelected] = useState(props)
+export default function LocationDetailsShowWindow (props) {
+    const [selected, setSelected] = useState(props)
     const [location, setLocation] = useState({
         name: "",
         city: "",
@@ -22,7 +22,7 @@ export default function LocationDetailsShowWindow () {
 
     const getLocation = async () => {
         try {
-            const res = await axios.get(`${API_ROOT}/locations/8`);
+            const res = await axios.get(`${API_ROOT}/locations`);
             setLocation(res.data);
             console.log("location request (hardcoded id):",location);
         }catch(err){
@@ -33,11 +33,12 @@ export default function LocationDetailsShowWindow () {
     return(
         <div className='LocationDetailsShowContainer'>
             <h3>{location.name} </h3>
+            <button>Edit</button>
             <p>City: {location.city} </p>
             <p>Country: {location.country} </p>
             <p>Date Visited: {location.date_visited}</p>
             <p>Notes: {location.note}</p>
-            <p>Images: {location.images.map(img => <img src = {img} className='locationImage'/> )}</p>
+            <p>Images: {location.images.map(img => <img key={img} src = {img} className='locationImage'/> )}</p>
         </div>
     )
 
