@@ -21,17 +21,13 @@ export default function LocationDetailsShowWindow () {
     }, [])
 
     const getLocation = async () => {
-        // let token = "Bearer " + localStorage.getItem("jwt");
         try {
-            const res = await axios.get(`${API_ROOT}/locations/6`);
-            console.log("location:",res.data);
+            const res = await axios.get(`${API_ROOT}/locations/8`);
             setLocation(res.data);
-            console.log("location:",location);
+            console.log("location request (hardcoded id):",location);
         }catch(err){
             console.log("Can't get Locations:", err)
         }
-        
-
     };
 
     return(
@@ -41,7 +37,7 @@ export default function LocationDetailsShowWindow () {
             <p>Country: {location.country} </p>
             <p>Date Visited: {location.date_visited}</p>
             <p>Notes: {location.note}</p>
-            <p>Images: {location.images}</p>
+            <p>Images: {location.images.map(img => <img src = {img} className='locationImage'/> )}</p>
         </div>
     )
 

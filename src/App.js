@@ -61,20 +61,20 @@ function App() {
   //   })
   // }
 
-  const handleLogin = () => {
-    // return axios.post(`${API_ROOT}/user_token`,{auth: request})
-    // .then(result =>{
-    //   console.log('Logging Sucess!',result)
-    //   localStorage.setItem("jwt", result.data.jwt)
-    checkLogin();
-    //   // navigate(`/dashboard`);
-    //   //TODO customize knock response to include current user oject - same data from line 24
-    // })
-    // .catch(err => {
-    //   console.log("Cannot Log In:",err);
-    // })
+  // const handleLogin = () => {
+  //   return axios.post(`${API_ROOT}/user_token`,{auth: request})
+  //   .then(result =>{
+  //     console.log('Logging Sucess!',result)
+  //     localStorage.setItem("jwt", result.data.jwt)
+  //   checkLogin();
+  //     // navigate(`/dashboard`);
+  //     //TODO customize knock response to include current user oject - same data from line 24
+  //   })
+  //   .catch(err => {
+  //     console.log("Cannot Log In:",err);
+  //   })
     
-  }
+  // }
   
   const handleLogout = () => {
     setCurrentUser(user);

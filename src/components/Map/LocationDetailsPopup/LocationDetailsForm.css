@@ -34,3 +34,10 @@ label{
     font-size: 10px;
     vertical-align: 2.5px;
 }
+
+.locationImage{
+  position: relative;
+  display: inline-flexbox;
+  width: 100px;
+  height: 100px;
+}
