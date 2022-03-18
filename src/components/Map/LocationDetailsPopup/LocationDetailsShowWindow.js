@@ -15,16 +15,25 @@ export default function LocationDetailsShowWindow (props) {
         images: [],
         note: ""
     })
+    // const [selectedMarker, setSelectedMarker] = useState({
+    //    lat: "",
+    //    lng: "" 
+    // })
 
     useEffect(() => {
-        getLocation();
+        getLocation(props);
+        setSelected(props);
     }, [])
 
     const getLocation = async () => {
+        // setSelectedMarker(selected)
         try {
-            const res = await axios.get(`${API_ROOT}/locations`);
+            console.log("selected",selected.selected.id);
+            const selectedMarkerId = selected.selected.id;
+
+            const res = await axios.get(`${API_ROOT}/locations/${selectedMarkerId}`);
             setLocation(res.data);
-            console.log("location request (hardcoded id):",location);
+            console.log("get Location details by selectedMarkerID:",res.data);
         }catch(err){
             console.log("Can't get Locations:", err)
         }
@@ -32,6 +41,7 @@ export default function LocationDetailsShowWindow (props) {
 
     return(
         <div className='LocationDetailsShowContainer'>
+            {/* <p>Details Window</p> */}
             <h3>{location.name} </h3>
             <button>Edit</button>
             <p>City: {location.city} </p>

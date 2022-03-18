@@ -44,21 +44,18 @@ export default function SinglePlaceMap() {
         libraries,
     });
     const [markers, setMarkers] = useState([]); // creates markers on the map
-    const [seededMarkers, setSeededMarkers] = useState([
-
-    ]); // state for seeded markers on the map
+  
     const [selected, setSelected] = useState(null); // clicking on marker -shows details of the current selected marker in a new state 
     ////^States
 
     useEffect(() => {
-        getSeededMarkers();
+        getUserMarkers();
     },[])
 
-    const getSeededMarkers = async () => {
+    const getUserMarkers = async () => {
         try{
             const res = await axios.get(`${API_ROOT}/locations`);
-            console.log("Seeded Markers:", res.data);
-            // seededMarkers = res.data
+            console.log("User Markers:", res.data);
             setMarkers(res.data)
         }catch(err){
             console.log("Cannot get seeded Markers:", err)
@@ -67,26 +64,17 @@ export default function SinglePlaceMap() {
 
     const onMapClick = React.useCallback((event) => {
         setMarkers(current => [...current,{
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng(),
+            lat: parseFloat(event.latLng.lat()),
+            lng: parseFloat(event.latLng.lng()),
             // created_at: new Date(),
-        }])
-
-        // axios post to create a new location- to be able to pass marked location id to show pop up window with details.
-
-        // console.log(event);
+        }]) 
     },[])// avoids recreating the onclick markers on every single render
     
-    // const handleVisitedClick = (ev) => {
-    //     console.log("visited button clicked")
+   
+    // const handleEditMarkerClick = (ev) => {
+    //     setSelected(selected);
+    //     console.log("Save marker clicked")
     // }
-    // const handleWantToVisitClick = (ev) => {
-    //     console.log("want to visit button clicked")
-    // }
-    const handleEditMarkerClick = (ev) => {
-        setSelected(selected);
-        console.log("Save marker clicked")
-    }
     const handleDeleteMarkerClick = (ev) => {
         const keptMarkers = markers.filter(m => m !== selected);
         setMarkers(keptMarkers);
@@ -135,7 +123,7 @@ export default function SinglePlaceMap() {
 
                 {selected ? (
                     <div>
-                        <InfoWindow position={{lat: selected.lat, lng: selected.lng}} onCloseClick={() => {
+                        <InfoWindow position={{lat: parseFloat(selected.lat), lng: parseFloat(selected.lng)}} onCloseClick={() => {
                             setSelected(null);// reset setSelected so inforWindow can be shown when selecting a new marker- toggling it on an off
                         }}>
                             <div>
@@ -148,16 +136,16 @@ export default function SinglePlaceMap() {
                             </div>
                             
                         </InfoWindow>
-                        <LocationDetailsForm/>
-                        <LocationDetailsShowWindow/>
+                        <LocationDetailsForm selected={selected}/>
+                        <LocationDetailsShowWindow selected={selected}/>
                         
                     </div>
-                    
-                    ) : null}
+                    ) 
+                    : null
+                    }
             
             </GoogleMap>
             
-
         </div>
     );
 }

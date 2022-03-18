@@ -9,10 +9,7 @@ function SignUpForm(props) {
         email: "",
         password: ""
     });
-    // const [submitted, setSubmitted] = useState(false);
-    // const [name, setName] = useState("")
-    // const [email, setEmail] = useState("")
-    // const [password, setPassword] = useState("")
+   
     const navigate = useNavigate();
 
     const handleInput = (ev) => {
@@ -24,26 +21,10 @@ function SignUpForm(props) {
         console.log(values);
     }
 
-    // const handleNameChange = (ev) => {
-    //     setName(ev.target.value)
-    // }
-
-    // const handleEmailChange = (ev) => {
-    //     setEmail(ev.target.value)
-    // }
-    
-    // const handlePasswordChange = (ev) => {
-    //     setPassword(ev.target.value)
-    // }
-
     const handleSubmit = async(ev) => {
         ev.preventDefault();
-        // setSubmitted(true);
-        // const request = {name,email,password}
-        // console.log("request:", name, email,password);
-       
+    
         try{
-            // props.handleSignUp(request);
             const res = await axios.post(`${API_ROOT}/user/create`, values);
             console.log('SignUp Sucess!',res);
             setValues(res.data);
@@ -71,17 +52,14 @@ function SignUpForm(props) {
                 <div className='field'>
                     <label>Name</label>
                     <input name='name' onChange={handleInput} type="text" placeholder="Name"/>
-                    {/* {submitted && !name ? <span>Please enter a name</span> : null} */}
                 </div>
                 <div className='field'>
                     <label>email</label>
                     <input name='email' onChange={handleInput} type="text" placeholder="Email"/>
-                    {/* {submitted && !email ? <span>Please enter an email</span> : null} */}
                 </div>
                 <div className='field'>
                     <label>Password</label>
                     <input name='password' onChange={handleInput} type="password" placeholder="Password"/>
-                    {/* {submitted && !password ? <span>Please enter a password</span> : null} */}
                 </div>
 
                 <button className='ui button' type='submit'>Sign Up</button>
