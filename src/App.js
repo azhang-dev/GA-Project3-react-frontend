@@ -41,6 +41,8 @@ function App() {
       })
       .catch(err => console.log("no  current user",err))
       
+    }else{
+      setUserIsLoaded(true);
     }// if(token)
   }
   
@@ -72,7 +74,6 @@ function App() {
                         <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
                         <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
-                        {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
                     )
                     :
@@ -80,7 +81,6 @@ function App() {
                       <ul> 
                         <li><Link to='/login' className="nav-links-header">Log In</Link></li>
                         <li><Link to='/sign-up' className="nav-links-header">Sign Up</Link></li>
-                        {/* <li><Link to='/single-place-map' className="nav-links-header">testMap</Link></li> */}
                       </ul>
                     )
                   }

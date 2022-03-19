@@ -45,8 +45,10 @@ export default function SinglePlaceMap() {
     });
     const [markers, setMarkers] = useState([]); // creates markers on the map
   
-    const [selected, setSelected] = useState(null); // clicking on marker -shows details of the current selected marker in a new state 
+    const [selectedMarker, setSelectedMarker] = useState(null); // clicking on marker -shows details of the current selectedMarker marker in a new state 
     ////^States
+    const [newMarker, setNewMarker] = useState(null);
+   
 
     useEffect(() => {
         getUserMarkers();
@@ -63,22 +65,19 @@ export default function SinglePlaceMap() {
     }
 
     const onMapClick = React.useCallback((event) => {
-        setMarkers(current => [...current,{
+        const addedMarker = {  
             lat: parseFloat(event.latLng.lat()),
             lng: parseFloat(event.latLng.lng()),
-            // created_at: new Date(),
-        }]) 
+        }
+        setMarkers(current => [...current,addedMarker]);// setMarkers()
+        setNewMarker(addedMarker)
     },[])// avoids recreating the onclick markers on every single render
     
    
-    // const handleEditMarkerClick = (ev) => {
-    //     setSelected(selected);
-    //     console.log("Save marker clicked")
-    // }
     const handleDeleteMarkerClick = (ev) => {
-        const keptMarkers = markers.filter(m => m !== selected);
+        const keptMarkers = markers.filter(m => m !== selectedMarker);
         setMarkers(keptMarkers);
-        setSelected(null);
+        setSelectedMarker(null);
         
         console.log("delete marker clicked")
     }
@@ -92,8 +91,7 @@ export default function SinglePlaceMap() {
         mapRef.current.panTo({lat, lng});
         mapRef.current.setZoom(16);
     }, []);
-
-
+ 
     if(loadError) return "Error loading maps";
     if(!isLoaded) return "Loading Maps";
 
@@ -113,36 +111,44 @@ export default function SinglePlaceMap() {
                 onLoad={onMapLoad}
             >
                 {markers.map(marker => <Marker 
-                    key={marker.id} 
+                    key={`${marker.lat},${marker.lng}`} 
                     position={{lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                     onClick={() => {
-                        setSelected(marker); // on click saves the selected marker to the selectedState
-                        
+                        setSelectedMarker(marker); // on click saves the selectedMarker marker to the selectedState
                     }}
                 />)}
 
-                {selected ? (
+                {selectedMarker 
+                ? 
+                (
                     <div>
-                        <InfoWindow position={{lat: parseFloat(selected.lat), lng: parseFloat(selected.lng)}} onCloseClick={() => {
-                            setSelected(null);// reset setSelected so inforWindow can be shown when selecting a new marker- toggling it on an off
+                        <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
+                            setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
                         }}>
                             <div>
                                 <h2>"Location Marked!"</h2>
-                                {/* <p>Marked at: {formatRelative(selected.created_at, new Date())}</p> */}
-                                {/* <button onClick={handleVisitedClick}>Visited</button>
-                                <button onClick={handleWantToVisitClick}>Want To Visit</button> */}
-                                {/* <button onClick={handleEditMarkerClick}>Edit details</button> */}
                                 <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                             </div>
                             
                         </InfoWindow>
-                        {/* <LocationDetailsForm selected={selected}/> */}
-                        <LocationDetailsShowWindow selected={selected}/>
+                        {/* { newMarker && <LocationDetailsForm selectedMarker={newMarker}/> }
+                        { selectedMarker && <LocationDetailsShowWindow location={selectedMarker}/> } */}
+                        {/* {
+                            newMarker
+                            ?
+                            <LocationDetailsForm selectedMarker={selectedMarker}/>
+                            :
+                            <LocationDetailsShowWindow location={selectedMarker}/> 
+                        } */}
+                        {/* <LocationPopupWindow location={selectedMarker}/> */}
+                        {/* <LocationDetailsForm selectedMarker={selectedMarker}/> */}
+                        <LocationDetailsShowWindow location={selectedMarker}/>
                         
                     </div>
-                    ) 
-                    : null
-                    }
+                ) 
+                : 
+                newMarker && <LocationDetailsForm selectedMarker={newMarker}/> 
+                }
             
             </GoogleMap>
             
@@ -170,21 +176,23 @@ function Locate({panTo}) {
     );
 }
 
-// function LocationDetailsPopup(selected){
-    
-//     return(
-//         <div>
-//             {
-//                 selected !== null
-//                 ?
-//                 (<LocationDetailsForm/>)
-//                 :
-//                 null
-//                 }
-//             {/* <LocationDetailsShowWindow/> */}
-//         </div>
-//     );
-// }
+function LocationPopupWindow(props){
+    console.log("location data:",props)
+    const locationID =  props.location.id;
+    console.log("locationID:",locationID);
+    if(locationID !== undefined){
+        return(
+                <LocationDetailsShowWindow 
+                 location={props}
+                /> 
+        )
+        
+    }else{
+        return <LocationDetailsForm /> 
+    }
+   
+   
+}
 
 function Search({panTo}) {
     const {
@@ -203,7 +211,7 @@ function Search({panTo}) {
     return (
         <div className="search">
             <Combobox onSelect={ async (address) => {
-                setValue(address, false); // sets the selected address to state and in the searchbox
+                setValue(address, false); // sets the selectedMarker address to state and in the searchbox
                 clearSuggestions()
                 try {
                     const results = await getGeocode({address});

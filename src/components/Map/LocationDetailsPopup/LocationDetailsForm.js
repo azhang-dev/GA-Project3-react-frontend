@@ -5,8 +5,7 @@ import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 import "./LocationDetailsForm.css"
 
 export default function LocationDetailsForm (props) {
-    // const [editStatus, setEditStatus] = useState(true)
-    const [submitted, setSubmitted] = useState (false)
+   
     const [selected, setSelected] = useState(props)
     const [location, setLocation] = useState({
     name: "",
@@ -21,6 +20,7 @@ export default function LocationDetailsForm (props) {
 
     useEffect(() => {
         setSelected(props);
+        console.log("selected props:",props);
     }, [])
 
     const handleInput = (ev) => {
@@ -32,19 +32,38 @@ export default function LocationDetailsForm (props) {
         console.log(location);
     }
 
+    const handleToggleVisited = (ev) => {
+        const visitCheckbox = ev.target.checked;
+      
+        console.log("visitcheckbox",visitCheckbox)
+        setLocation({...location,visited: visitCheckbox})
+    }
+    const handleToggleBucketlist = (ev) => {
+      
+        const bucketlistCheckbox = ev.target.checked;
+        console.log("bucketlistcheckbox", bucketlistCheckbox)
+        setLocation({...location, bucketlist: bucketlistCheckbox})
+    }
+
     const uploadImage = (files) => {
 
     }
 
     const handleSubmit = async (ev) => {
         ev.preventDefault();
-        console.log(location);
+      
+        console.log("location info",location);
+        console.log("selected info",selected.selectedMarker);
+        const postData = {
+            ...location,
+            ...selected.selectedMarker
+        }
+
         try{
-            const res = await axios.post(`${API_ROOT}/locations`, location);
-            console.log("Submit Sucess!", res);
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
+            const res = await axios.post(`${API_ROOT}/locations`, postData);
+            console.log("Submit Sucess!", res);  
             setLocation(res.data)
-            setSubmitted(true)
+           
         }catch(err){
             console.log("Error submitting form:", err)
         }
@@ -52,39 +71,34 @@ export default function LocationDetailsForm (props) {
         //axios patch (update)
     }
 
-    // const handleBackButton = (ev) => {
-    //     console.log("back button clicked")
-    //     setEditStatus(false);
-    //     setLocation(selected)
-    // }
-
     return(
 
         <div>
             {
-                submitted !== true ? (
+                 (
                     <div className='LocationDetailsFormContainer'>
                         <h3>Edit Location Details</h3>
                         <form className='inputFormContainer' onSubmit={handleSubmit}>
                             
+                            {/* <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/> */}
                             <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
                         
                             <input name="city" onChange={handleInput} type="text" placeholder="City"/>
                     
-                            <input name="Country" onChange={handleInput} type="text" placeholder="Country"/>
+                            <input name="country" onChange={handleInput} type="text" placeholder="Country"/>
                     
                             <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
 
                             <div>
-                                <input name="visited" onChange={handleInput} type="checkbox" placeholder="visted(change to icon button)"/>
+                                <input name="visited" defaultChecked={location.visited} onChange={handleToggleVisited} type="checkbox" />
                                 <label> Visited </label>
-                                <input name="bucketlist" onChange={handleInput} type="checkbox" placeholder="bucketlist(change to icon button)"/>
+                                <input name="bucketlist" defaultChecked={location.bucketlist} onChange={handleToggleBucketlist} type="checkbox" />
                                 <label> Want to visit</label>
                             </div>
                             
                             <input name="images" onChange={handleInput} type="file" placeholder="Images Cloudinary"/>
 
-                            <input name="note" onChange={(ev) => {uploadImage(ev.target.files)}} type="textfield" placeholder="Notes"/>
+                            <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
 
                             {/* <button onClick={handleBackButton}>Back</button> */}
                             <button>Save</button>
@@ -92,13 +106,8 @@ export default function LocationDetailsForm (props) {
                         </form>
                     </div>
                 )
-                :
-                (
-                    <LocationDetailsShowWindow 
-                    // selected={selected} 
-                    // editStatus={editStatus}
-                    />
-                )
+                
+                
             }
         </div>
         

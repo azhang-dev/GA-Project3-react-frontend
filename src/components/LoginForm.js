@@ -22,7 +22,7 @@ function LoginForm(props){
       ...user,
       [name]: value
     })
-    console.log(user);
+    // console.log(user);
   }
  
   const handleSubmit = async (ev) => {
@@ -37,13 +37,16 @@ function LoginForm(props){
     try {
       const res = await axios.post(`${API_ROOT}/user_token`, {auth: user})
       console.log('Logging Sucess!',res);
-      props.checkLogin();
+      // console.log(user);
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
       localStorage.setItem("jwt", res.data.jwt)
+      props.checkLogin();
+      // localStorage.setItem("user", user);
       navigate(`/dashboard`);
     }catch(err){
       setErrorMessage("Incorrect Login Details");
       console.log("error message: cant log in",err)
+      
     };
   }
     const formDivStyle = {
