@@ -15,14 +15,13 @@ export default function LocationDetailsShowWindow (props) {
             {
                 !editStatus ? (
                     <div className='LocationDetailsShowContainer'>
-                        {/* <p>Details Window</p> */}
                         <h3>{props.location.name} </h3>
                         <button onClick={handleEditButton}>Edit</button>
                         <p>City: {props.location.city} </p>
                         <p>Country: {props.location.country} </p>
                         <p>Date Visited: {props.location.date_visited}</p>
                         <p>Notes: {props.location.note}</p>
-                        {/* <p>Images: {props.location.images.map(img => <img key={img} src = {img} className='locationImage'/> )}</p> */}
+                        <p>Images: {props.location.images.map(img => <img key={img} src = {img} className='locationImage'/> )}</p>
                     </div>
                 )
                 :

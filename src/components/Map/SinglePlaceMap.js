@@ -6,9 +6,9 @@ import { API_ROOT } from '../../constants';
 import LocationDetailsForm from "./LocationDetailsPopup/LocationDetailsForm";
 import LocationDetailsShowWindow from './LocationDetailsPopup/LocationDetailsShowWindow';
 
-import usePlacesAutocomplete, { getGeocode, getLatLng , getDetails} from "use-places-autocomplete";
+import usePlacesAutocomplete, { getGeocode, getLatLng} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
-import { formatRelative, set } from "date-fns";
+// import { formatRelative, set } from "date-fns";
 import "@reach/combobox/styles.css";
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
@@ -78,6 +78,7 @@ export default function SinglePlaceMap() {
         const keptMarkers = markers.filter(m => m !== selectedMarker);
         setMarkers(keptMarkers);
         setSelectedMarker(null);
+       
         
         console.log("delete marker clicked")
     }
@@ -114,16 +115,18 @@ export default function SinglePlaceMap() {
                     key={`${marker.lat},${marker.lng}`} 
                     position={{lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                     onClick={() => {
-                        setSelectedMarker(marker); // on click saves the selectedMarker marker to the selectedState
+                        setSelectedMarker(marker);
+                        console.log("marker selected:",marker); // on click saves the selectedMarker marker to the selectedState
                     }}
                 />)}
 
-                {selectedMarker 
+                {selectedMarker && selectedMarker.id
                 ? 
                 (
                     <div>
                         <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
                             setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
+                            setNewMarker(null);
                         }}>
                             <div>
                                 <h2>"Location Marked!"</h2>
@@ -142,12 +145,25 @@ export default function SinglePlaceMap() {
                         } */}
                         {/* <LocationPopupWindow location={selectedMarker}/> */}
                         {/* <LocationDetailsForm selectedMarker={selectedMarker}/> */}
-                        <LocationDetailsShowWindow location={selectedMarker}/>
+                        <LocationDetailsShowWindow location={selectedMarker} />
                         
                     </div>
                 ) 
                 : 
-                newMarker && <LocationDetailsForm selectedMarker={newMarker}/> 
+                newMarker && 
+                <div>
+                    <InfoWindow position={{lat: parseFloat(newMarker.lat), lng: parseFloat(newMarker.lng)}} onCloseClick={() => {
+                        setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
+                        setNewMarker(null);
+                    }}>
+                        <div>
+                            <h2>"Location Marked!"</h2>
+                            <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
+                        </div>
+                        
+                    </InfoWindow>
+                    <LocationDetailsForm selectedMarker={newMarker}/> 
+                </div>
                 }
             
             </GoogleMap>
@@ -162,13 +178,13 @@ function Locate({panTo}) {
             console.log("current location button clicked");                                         
             navigator.geolocation.getCurrentPosition(
                 (position) => { 
+                    console.log ("geolocation position:",position)
                     panTo({
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     })
-                    console.log ("geolocation position:",position)
                 }, 
-                () => null // no error handling needed -null
+                () => {console.log("cannot perform GEOLOCATION")}// no error handling needed -null
             ); //getCurrentPosition(sucess,error,options)
         }}>
             <img src="./images/location.png" alt="current location icon" />
@@ -176,23 +192,23 @@ function Locate({panTo}) {
     );
 }
 
-function LocationPopupWindow(props){
-    console.log("location data:",props)
-    const locationID =  props.location.id;
-    console.log("locationID:",locationID);
-    if(locationID !== undefined){
-        return(
-                <LocationDetailsShowWindow 
-                 location={props}
-                /> 
-        )
+// function LocationPopupWindow(props){
+//     console.log("location data:",props)
+//     const locationID =  props.location.id;
+//     console.log("locationID:",locationID);
+//     if(locationID !== undefined){
+//         return(
+//                 <LocationDetailsShowWindow 
+//                  location={props}
+//                 /> 
+//         )
         
-    }else{
-        return <LocationDetailsForm /> 
-    }
+//     }else{
+//         return <LocationDetailsForm /> 
+//     }
    
    
-}
+// }
 
 function Search({panTo}) {
     const {
