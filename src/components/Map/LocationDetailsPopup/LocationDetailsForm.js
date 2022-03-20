@@ -8,15 +8,17 @@ export default function LocationDetailsForm (props) {
    
     const [selected, setSelected] = useState(props)
     const [location, setLocation] = useState({
-    name: "",
-    city: "",
-    country: "",
-    visited: false,
-    date_visited: "",
-    bucketlist: false,
-    images: [],
-    note: ""
-  })
+        name: "",
+        city: "",
+        country: "",
+        visited: false,
+        date_visited: "",
+        bucketlist: false,
+        images: [],
+        note: ""
+    })
+  
+    const [submitted,setSubmitted] = useState(false)
 
     useEffect(() => {
         setSelected(props);
@@ -32,6 +34,7 @@ export default function LocationDetailsForm (props) {
         console.log(location);
     }
 
+    //Handles values for visted/bucketlist. Toggle between boolean when checked/unchecked box
     const handleToggleVisited = (ev) => {
         const visitCheckbox = ev.target.checked;
       
@@ -57,7 +60,7 @@ export default function LocationDetailsForm (props) {
         const postData = {
             ...location,
             ...selected.selectedMarker
-        }
+        }// sends both location values + lat lng from selected marker(generated from googlemap)
 
         try{
             const res = await axios.post(`${API_ROOT}/locations`, postData);
@@ -67,12 +70,9 @@ export default function LocationDetailsForm (props) {
         }catch(err){
             console.log("Error submitting form:", err)
         }
-
-        //axios patch (update)
     }
 
     return(
-
         <div>
             {
                  (
@@ -105,13 +105,8 @@ export default function LocationDetailsForm (props) {
                     
                         </form>
                     </div>
-                )
-                
-                
+                )  
             }
-        </div>
-        
+        </div> 
     )
-
-
 }

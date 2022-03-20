@@ -65,6 +65,7 @@ export default function SinglePlaceMap() {
     }
 
     const onMapClick = React.useCallback((event) => {
+        setSelectedMarker(null);//  reset selected marker so when added new marker the form is shown
         const addedMarker = {  
             lat: parseFloat(event.latLng.lat()),
             lng: parseFloat(event.latLng.lng()),
@@ -75,9 +76,10 @@ export default function SinglePlaceMap() {
     
    
     const handleDeleteMarkerClick = (ev) => {
-        const keptMarkers = markers.filter(m => m !== selectedMarker);
+        const keptMarkers = markers.filter(m => m !== newMarker);
         setMarkers(keptMarkers);
         setSelectedMarker(null);
+        setNewMarker(null);
        
         
         console.log("delete marker clicked")
@@ -124,7 +126,7 @@ export default function SinglePlaceMap() {
                 ? 
                 (
                     <div>
-                        <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
+                        {/* <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
                             setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
                             setNewMarker(null);
                         }}>
@@ -133,7 +135,7 @@ export default function SinglePlaceMap() {
                                 <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
                             </div>
                             
-                        </InfoWindow>
+                        </InfoWindow> */}
                         {/* { newMarker && <LocationDetailsForm selectedMarker={newMarker}/> }
                         { selectedMarker && <LocationDetailsShowWindow location={selectedMarker}/> } */}
                         {/* {
@@ -155,10 +157,11 @@ export default function SinglePlaceMap() {
                     <InfoWindow position={{lat: parseFloat(newMarker.lat), lng: parseFloat(newMarker.lng)}} onCloseClick={() => {
                         setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
                         setNewMarker(null);
+                        handleDeleteMarkerClick();
                     }}>
                         <div>
                             <h2>"Location Marked!"</h2>
-                            <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
+                            {/* <button onClick={handleDeleteMarkerClick}>Remove Marker</button> */}
                         </div>
                         
                     </InfoWindow>
