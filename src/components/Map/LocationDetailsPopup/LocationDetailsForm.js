@@ -29,6 +29,7 @@ export default function LocationDetailsForm (props) {
         setSelected(props);
         console.log("selected props:",props);
        
+       
     }, [])
 
     const handleInput = (ev) => {
@@ -96,6 +97,7 @@ export default function LocationDetailsForm (props) {
             setImages(res.data);
             setSubmitted(true);
             props.getUserMarkers();
+        
             
         }catch(err){
             console.log("Error submitting form:", err)
@@ -113,7 +115,7 @@ export default function LocationDetailsForm (props) {
     return(
         <div>
             { 
-            !submitted
+            !submitted && !selected.id
             ?
                 (
                 <div className='LocationDetailsFormContainer'>
