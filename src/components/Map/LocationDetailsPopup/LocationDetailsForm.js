@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import { API_ROOT } from '../../../constants';
-import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 import "./LocationDetailsForm.css"
-import { set } from 'date-fns';
 
 export default function LocationDetailsForm (props) {
    
@@ -19,7 +17,7 @@ export default function LocationDetailsForm (props) {
         date_visited: "",
         bucketlist: false,
         note: "",
-        images:""
+        images:[]
     });
   
     const [submitted,setSubmitted] = useState(false);
@@ -37,7 +35,6 @@ export default function LocationDetailsForm (props) {
         })
         // console.log(location);
     }
-
     //Handles values for visted/bucketlist. Toggle between boolean when checked/unchecked box
     const handleToggleVisited = (ev) => {
         const visitCheckbox = ev.target.checked;
@@ -52,40 +49,6 @@ export default function LocationDetailsForm (props) {
         setLocation({...location, bucketlist: bucketlistCheckbox})
     }
 
-    // const uploadImages = (ev) => {
-    //     const image = ev.target.value;
-    //     setImages([...images, image]);
-    //     console.log(images);
-    //     setLocation({...location, images: images})
-    //     console.log("checking img input in location:",location)
-        
-    // }
-    
-
-    const handleSubmit = async (ev) => {
-        ev.preventDefault();
-      
-        console.log("location info",location);
-        console.log("selected info",selected.selectedMarker);
-        console.log("images url:", images);
-        const postData = {
-            ...location,
-            ...selected.selectedMarker,
-            ...images,
-        
-        }// sends both location values + lat lng from selected marker(generated from googlemap)
-
-        try{
-            const res = await axios.post(`${API_ROOT}/locations`, postData);
-            console.log("Submit Sucess!", res);  
-            setLocation(res.data);
-            setSubmitted(true);
-           
-            
-        }catch(err){
-            console.log("Error submitting form:", err)
-        }
-    }
 
     // const handleLocationImageChange = (imageId) => {
     // // sets profile image in the state using the value from the input
@@ -111,22 +74,49 @@ export default function LocationDetailsForm (props) {
       (error, result) => {
         if (!error && result && result.event === "success") {
             console.log("Done! Here is the image info: ", result.info);
-            console.log(result.info.secure_url);
-            // const imageUpload = {
+            console.log(result.info.public_id);
+            // const imagesUpload = {
             //     images: result.info.public_id
             // }
-            setImages(currentImages => [...currentImages, [{images: result.info.public_id}] ]) // adds new images to the array in imageState, avoids closure, stale state
-            //  handleLocationImageChange(result.info.secure_url)
-            // console.log("images state:",currentImages);
+            setImages(currentImages => [...currentImages, result.info.public_id  ]); // adds new images to the array in imageState, avoids closure, stale state
+
+            // setLocation( ...location, {images: images})
+            //  handleLocationImageChange(result.info.public_id)
+            console.log("images state:",images);
         }
       }
     );
 
-    
+    const handleSubmit = async (ev) => {
+        ev.preventDefault();
+      
+        console.log("location info",location);
+        console.log("selected info",selected.selectedMarker);
+        console.log("images url:", images);
+        // const imageUpload = {
+        //     images: images
+        // }
+        const postData = {
+            ...location,
+            ...selected.selectedMarker,
+            images
+        }// sends both location values + lat lng from selected marker(generated from googlemap)
+
+        try{
+            const res = await axios.post(`${API_ROOT}/locations`, postData);
+            console.log("Submit Sucess!", res);  
+            setLocation(res.data);
+            setImages(res.data);
+            setSubmitted(true); 
+        }catch(err){
+            console.log("Error submitting form:", err)
+        }
+    }
 
     function openWidget (e) {
         e.preventDefault();
         myWidget.open()
+        console.log("clicked widget button")
     }
     
     return(
@@ -160,7 +150,7 @@ export default function LocationDetailsForm (props) {
 
 
                             <div className='img-container' >
-                                <img src={location.images[0]} alt="" />
+                                {/* <img src={location.images[0]} alt="" /> */}
                             </div>
 
                             <div className='btn-container' >
