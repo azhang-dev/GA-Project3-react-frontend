@@ -6,11 +6,13 @@ import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 
 
 export default function LocationDetailsForm (props) {
-   
+   //setup for Cloudinary upload widget
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_CLOUD_PRESET; 
-    const [selected, setSelected] = useState(props);
-    const [images, setImages]= useState([]);
+
+
+    const [selected, setSelected] = useState(props); // props passed down from LocationDetailsShowWindow
+    const [images, setImages]= useState([]); // a new state called images which is an empty array, to later store the uploaded images from cloudinary
     const [location, setLocation] = useState({
         name: "",
         city: "",
@@ -22,14 +24,11 @@ export default function LocationDetailsForm (props) {
         images:[]
     });
   
-    const [submitted,setSubmitted] = useState(false);
-    const [uploadImageMessage,setUploadImageMessage] = useState("");
+    const [submitted,setSubmitted] = useState(false); // will help change the ternary expression to switch to another component
 
     useEffect(() => {
-        setSelected(props);
+        setSelected(props);  // props passed down from LocationDetailsShowWindow
         console.log("selected props:",props);
-       
-       
     }, [])
 
     const handleInput = (ev) => {
@@ -38,42 +37,34 @@ export default function LocationDetailsForm (props) {
         ...location,
         [name]: value
         })
-        // console.log(location);
-    }
-    //Handles values for visted/bucketlist. Toggle between boolean when checked/unchecked box
+    }; // handleInput()
+
+    //Handles values for visted/bucketlist. Toggle between boolean when checked/unchecked box. the default values is currently set to false 
     const handleToggleVisited = (ev) => {
         const visitCheckbox = ev.target.checked;
       
         console.log("visitcheckbox",visitCheckbox)
         setLocation({...location,visited: visitCheckbox})
-    }
+    }// handleToggleVisited() 
+
     const handleToggleBucketlist = (ev) => {
-      
         const bucketlistCheckbox = ev.target.checked;
         console.log("bucketlistcheckbox", bucketlistCheckbox)
         setLocation({...location, bucketlist: bucketlistCheckbox})
     }
  
+    // cloudinary widget setup
     const myWidget = window.cloudinary.createUploadWidget(
       {
         cloudName: cloudName,
         uploadPreset: uploadPreset,
-        // cropping: true, //add a cropping step
-        // showAdvancedOptions: true,  //add advanced options (public_id and tag)
-        // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-        multiple: true,  //restrict upload to a single file
-        // folder: "user_images", //upload files to the specified folder
-        // tags: ["users", "profile"], //add the given tags to the uploaded files
-        // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
-        // clientAllowedFormats: ["images"], //restrict uploading to image files only
-        // maxImageFileSize: 2000000,  //restrict file size to less than 2MB
-        // maxImageWidth: 2000, //Scales the image down to a width of 2000 pixels before uploading
-        // theme: "purple", //change to a purple theme
+        multiple: true,  //Allows multiple upload of images
+  
       },
       (error, result) => {
         if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
-            console.log(result.info.secure_url);
+            console.log("Done! Here is the image info: ", result.info);// 
+            console.log(result.info.secure_url);// show what we need to retrieve: the secure_url of the images 
             setImages(currentImages => [...currentImages, result.info.secure_url ]); // adds new images to the array in imageState, avoids closure, stale state
         }
       }
@@ -82,13 +73,13 @@ export default function LocationDetailsForm (props) {
     const handleSubmit = async (ev) => {
         ev.preventDefault();
       
-        console.log("location info",location);
-        console.log("selected info",selected.selectedMarker);
+        console.log("location info",location); // logs the current location state data
+        console.log("selected info",selected.selectedMarker); // logs the Lat and lng coordinates that was passed down from the parent component
         const postData = {
             ...location,
             ...selected.selectedMarker,
             images
-        }// sends both location values + lat lng from selected marker(generated from googlemap)
+        }// groups both location values + lat lng from selected marker(generated from googlemap) into and object so it can be sent to POST 
  
         try{
             const res = await axios.post(`${API_ROOT}/locations`, postData);
@@ -96,12 +87,14 @@ export default function LocationDetailsForm (props) {
             setLocation(res.data);
             setImages(res.data);
             setSubmitted(true);
-            props.getUserMarkers();
+            props.getUserMarkers(); // repeat the funtion to get the current array of markers including the newly created location.
         }catch(err){
             console.log("Error submitting form:", err)
         } 
     }
 
+
+    //click function to open the cloudinary.
     function openWidget (e) {
         e.preventDefault();
         myWidget.open()
@@ -111,7 +104,7 @@ export default function LocationDetailsForm (props) {
     return(
         <div>
             { 
-            !submitted && !selected.id
+            !submitted && !selected.id // if its not sumbitted and there is no ID of the selected marker( meaning its a new marker to be created), show a empty form
             ?
                 (
                 <div className='LocationDetailsFormContainer'>
@@ -154,7 +147,7 @@ export default function LocationDetailsForm (props) {
                 )  
                 :
                 (
-                <LocationDetailsShowWindow location={location}/>
+                <LocationDetailsShowWindow location={location}/> // once submitted to show the LocationDetailsShowWindow component
                 )
              }
         </div> 

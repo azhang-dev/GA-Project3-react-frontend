@@ -8,12 +8,14 @@ import LocationDetailsShowWindow from './LocationDetailsPopup/LocationDetailsSho
 
 import usePlacesAutocomplete, { getGeocode, getLatLng} from "use-places-autocomplete";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from "@reach/combobox";
-// import { formatRelative, set } from "date-fns";
+// import { MarkerClusterer } from '@react-google-maps/api'; // To be later implemented
+
 import "@reach/combobox/styles.css";
+
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
 
-import {BiCurrentLocation} from 'react-icons/bi'
+import {BiCurrentLocation} from 'react-icons/bi' // Import Icon for geoLocation
 
 
 import "./placeMap.css"
@@ -50,8 +52,9 @@ export default function SinglePlaceMap() {
     const [selectedMarker, setSelectedMarker] = useState(null); // clicking on marker -shows details of the current selectedMarker marker in a new state 
     const [newMarker, setNewMarker] = useState(null);
     ////^States
-   
 
+    
+   
     useEffect(() => {
         getUserMarkers();
     },[])
@@ -111,7 +114,7 @@ export default function SinglePlaceMap() {
     return (    
         <div>
 
-            <Search panTo={panTo}/>
+            <Search panTo={panTo}/> 
             <Locate panTo={panTo}/>
             
             <GoogleMap 
@@ -127,11 +130,9 @@ export default function SinglePlaceMap() {
                     position={{lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                     onClick={() => {
                         setSelectedMarker(marker);
-                        console.log("selected marker:",marker);
-
-                       
-                         // on click saves the selectedMarker marker to the selectedState
+                        console.log("selected marker:",marker);// on click saves the selectedMarker marker to the selectedState
                     }}
+                    // const markerClusterer = new MarkerClusterer({map, markers}); // Clusterers- To be later implemented
                 />)}
                 {
                     newMarker && (

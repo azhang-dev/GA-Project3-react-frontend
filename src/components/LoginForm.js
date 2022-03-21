@@ -59,7 +59,7 @@ function LoginForm(props){
             <div style={formDivStyle}>
             <h1>LOG IN</h1>
             {
-                errorMessage && <p className='error-message'> Wrong Login Details</p>
+                errorMessage && <p className='error-message'> Wrong Login Details</p> // if errorMessage(failed log in) state is true, then show the errormessage
             }
             <form className="ui form" onSubmit={handleSubmit}>
                 <label className='formLabel'>Email</label>
