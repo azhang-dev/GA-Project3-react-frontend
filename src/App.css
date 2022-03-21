@@ -35,7 +35,7 @@
 }
 
 .welcomeText{
-  left: 0px;
+  margin: 0px 20px 0px 0px;
 }
 
 .nav-links-header{
@@ -48,7 +48,7 @@
   border-radius: 50px;
   width: 100px;
   height: 50;
-  margin: 0px 10px 0px -10px;
+  margin: 0px 20px 0px -10px;
   flex-direction: column;
 }
 
@@ -66,6 +66,7 @@ li {
 
 .field input{
   width: 200px;
+  border: 1px solid black;
 }
 
 .appDetailContainer{
@@ -102,4 +103,8 @@ height: 450px;
 
 .formLabel{
   font-size: 20px;
+}
+
+.inputFormContainerProfile{
+
 }

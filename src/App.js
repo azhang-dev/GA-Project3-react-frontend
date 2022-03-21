@@ -9,7 +9,9 @@ import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import Dashboard from "./components/Dashboard";
 import MyProfile from './Pages/MyProfile';
+import MyProfileForm from './Pages/MyProfileForm';
 import SinglePlaceMap from './components/Map/SinglePlaceMap';
+
 const user = {
     name: "",
     email: "",  
@@ -69,12 +71,15 @@ function App() {
                     ?
 
                     (
-                      <ul>
-                        <li className='welcomeText'>Welcome! {currentUser.name.toUpperCase()}</li>
-                        <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
-                        <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
-                        <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
-                      </ul>
+                      <div>
+
+                        <ul>
+                          <li className='welcomeText'>Welcome! {currentUser.name.toUpperCase()}</li>
+                          <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
+                          <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
+                          <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>
+                        </ul>
+                      </div>
                     )
                     :
                     (
@@ -93,7 +98,8 @@ function App() {
                     <Route exact path = '/'element={<Root/>}/>
                     <Route exact path = '/login'element={<LoginForm checkLogin={checkLogin}/>} />
                     <Route exact path = '/sign-up'element={<SignUpForm checkLogin={checkLogin}/>}/>
-                    <Route exact path = '/profile'element={<MyProfile/>}/>
+                    <Route exact path = '/profile'element={<MyProfile currentUser={currentUser}/>}/>
+                    <Route exact path = '/profile/edit'element={<MyProfileForm currentUser={currentUser} />}/>
                     <Route exact path = '/dashboard'element={<Dashboard />}/>
                     <Route exact path = '/single-place-map'element={<SinglePlaceMap/>}/>
                 </Routes>
