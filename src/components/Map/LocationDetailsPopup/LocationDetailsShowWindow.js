@@ -20,7 +20,7 @@ export default function LocationDetailsShowWindow (props) {
                         <p>Country: {props.location.country} </p>
                         <p>Date Visited: {props.location.date_visited}</p>
                         <p>Notes: {props.location.note}</p>
-                        <p>Images: {props.location.images.map(img => <img key={img} src = {img} className='locationImage'/> )}</p>
+                        <p>Images: {props.location.images.map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p>
                     </div>
                 )
                 :

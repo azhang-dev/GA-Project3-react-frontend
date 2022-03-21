@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import axios from "axios";
 import { API_ROOT } from '../../../constants';
 import "./LocationDetailsForm.css"
+import LocationDetailsShowWindow from './LocationDetailsShowWindow';
+
 
 export default function LocationDetailsForm (props) {
    
@@ -21,10 +23,12 @@ export default function LocationDetailsForm (props) {
     });
   
     const [submitted,setSubmitted] = useState(false);
+    const [uploadImageMessage,setUploadImageMessage] = useState("");
 
     useEffect(() => {
         setSelected(props);
         console.log("selected props:",props);
+       
     }, [])
 
     const handleInput = (ev) => {
@@ -48,13 +52,7 @@ export default function LocationDetailsForm (props) {
         console.log("bucketlistcheckbox", bucketlistCheckbox)
         setLocation({...location, bucketlist: bucketlistCheckbox})
     }
-
-
-    // const handleLocationImageChange = (imageId) => {
-    // // sets profile image in the state using the value from the input
-    // setLocation({...location, images: imageId })
-    // } 
-
+ 
     const myWidget = window.cloudinary.createUploadWidget(
       {
         cloudName: cloudName,
@@ -74,15 +72,8 @@ export default function LocationDetailsForm (props) {
       (error, result) => {
         if (!error && result && result.event === "success") {
             console.log("Done! Here is the image info: ", result.info);
-            console.log(result.info.public_id);
-            // const imagesUpload = {
-            //     images: result.info.public_id
-            // }
-            setImages(currentImages => [...currentImages, result.info.public_id  ]); // adds new images to the array in imageState, avoids closure, stale state
-
-            // setLocation( ...location, {images: images})
-            //  handleLocationImageChange(result.info.public_id)
-            console.log("images state:",images);
+            console.log(result.info.secure_url);
+            setImages(currentImages => [...currentImages, result.info.secure_url ]); // adds new images to the array in imageState, avoids closure, stale state
         }
       }
     );
@@ -92,10 +83,6 @@ export default function LocationDetailsForm (props) {
       
         console.log("location info",location);
         console.log("selected info",selected.selectedMarker);
-        console.log("images url:", images);
-        // const imageUpload = {
-        //     images: images
-        // }
         const postData = {
             ...location,
             ...selected.selectedMarker,
@@ -107,10 +94,14 @@ export default function LocationDetailsForm (props) {
             console.log("Submit Sucess!", res);  
             setLocation(res.data);
             setImages(res.data);
-            setSubmitted(true); 
+            setSubmitted(true);
+            props.getUserMarkers();
+            
         }catch(err){
             console.log("Error submitting form:", err)
         }
+
+        
     }
 
     function openWidget (e) {
@@ -122,52 +113,55 @@ export default function LocationDetailsForm (props) {
     return(
         <div>
             { 
-            // setSubmitted === false
-                 (
-                    <div className='LocationDetailsFormContainer'>
-                        <h3>Edit Location Details</h3>
-                        <form className='inputFormContainer' onSubmit={handleSubmit}>
-                            
-                            {/* <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/> */}
-                            <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
+            !submitted
+            ?
+                (
+                <div className='LocationDetailsFormContainer'>
+                    <h3>Edit Location Details</h3>
+                    <form className='inputFormContainer' onSubmit={handleSubmit}>
                         
-                            <input name="city" onChange={handleInput} type="text" placeholder="City"/>
+                        {/* <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/> */}
+                        <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
                     
-                            <input name="country" onChange={handleInput} type="text" placeholder="Country"/>
-                    
-                            <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
+                        <input name="city" onChange={handleInput} type="text" placeholder="City"/>
+                
+                        <input name="country" onChange={handleInput} type="text" placeholder="Country"/>
+                
+                        <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
 
-                            <div>
-                                <input name="visited" defaultChecked={location.visited} onChange={handleToggleVisited} type="checkbox" />
-                                <label> Visited </label>
-                                <input name="bucketlist" defaultChecked={location.bucketlist} onChange={handleToggleBucketlist} type="checkbox" />
-                                <label> Want to visit</label>
-                            </div>
+                        <div>
+                            <input name="visited" defaultChecked={location.visited} onChange={handleToggleVisited} type="checkbox" />
+                            <label> Visited </label>
+                            <input name="bucketlist" defaultChecked={location.bucketlist} onChange={handleToggleBucketlist} type="checkbox" />
+                            <label> Want to visit</label>
+                        </div>
+                        
+                        <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
+
+
+                        <div className='img-container' >
                             
-                            {/* <input name="images" onChange={uploadImages} type="file" placeholder="Images Cloudinary"/> */}
+                        </div>
 
-                            <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
+                        <div className='btn-container' >
+                            <button 
+                            onClick={openWidget} 
+                            id="upload_widget" 
+                            className='cloudinary-button'>
+                                Upload Images
+                            </button>
+                        </div>
+                        <br/>
+                        <button>Save</button>
+                
+                    </form>
 
-
-                            <div className='img-container' >
-                                {/* <img src={location.images[0]} alt="" /> */}
-                            </div>
-
-                            <div className='btn-container' >
-                                <button 
-                                onClick={openWidget} 
-                                id="upload_widget" 
-                                className='cloudinary-button'>
-                                    Upload Images
-                                </button>
-                            </div>
-                            <br/>
-                            <button>Save</button>
-                    
-                        </form>
-
-                    </div>
+                </div>
                 )  
+                :
+                (
+                <LocationDetailsShowWindow location={location}/>
+                )
              }
         </div> 
     )// return()

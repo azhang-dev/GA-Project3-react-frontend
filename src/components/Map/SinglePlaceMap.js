@@ -57,6 +57,8 @@ export default function SinglePlaceMap() {
     },[])
 
     const getUserMarkers = async () => {
+        
+
         try{
             const res = await axios.get(`${API_ROOT}/locations`);
             console.log("User Markers:", res.data);
@@ -64,6 +66,7 @@ export default function SinglePlaceMap() {
         }catch(err){
             console.log("Cannot get seeded Markers:", err)
         }
+        
     }
 
     const onMapClick = React.useCallback((event) => {
@@ -73,7 +76,8 @@ export default function SinglePlaceMap() {
             lng: parseFloat(event.latLng.lng()),
         }
         setMarkers(current => [...current,addedMarker]);// setMarkers()
-        setNewMarker(addedMarker)
+        setNewMarker(addedMarker);
+        
     },[])// avoids recreating the onclick markers on every single render
     
    
@@ -120,7 +124,9 @@ export default function SinglePlaceMap() {
                     position={{lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
                     onClick={() => {
                         setSelectedMarker(marker);
-                        console.log("marker selected:",marker); // on click saves the selectedMarker marker to the selectedState
+                        setNewMarker(null);
+                        console.log("selected marker:",marker);
+                         // on click saves the selectedMarker marker to the selectedState
                     }}
                 />)}
 
@@ -144,7 +150,10 @@ export default function SinglePlaceMap() {
                         </div>
                         
                     </InfoWindow>
-                    <LocationDetailsForm selectedMarker={newMarker} /> 
+                    <LocationDetailsForm 
+                    selectedMarker={newMarker}
+                    getUserMarkers={getUserMarkers}
+                    /> 
                 </div>
                 }
             
