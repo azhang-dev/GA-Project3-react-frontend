@@ -9,7 +9,6 @@ export default function LocationDetailsShowWindow (props) {
     const [deleted, setDeleted]= useState(false)
 
     const handleEditButton = (ev) => {
-        ev.preventDefault();
         console.log("edit button clicked")
         setEditStatus(true);
     }
@@ -47,7 +46,10 @@ export default function LocationDetailsShowWindow (props) {
                 )
                 :
                 (
-                <LocationDetailsEditForm location={props.location} editStatus={editStatus} />
+                <LocationDetailsEditForm 
+                location={props.location} 
+                // editStatus={editStatus} 
+                />
                 )
             }
         </div>

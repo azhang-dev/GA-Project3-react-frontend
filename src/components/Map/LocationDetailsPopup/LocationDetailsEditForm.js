@@ -5,11 +5,12 @@ import "./LocationDetailsForm.css"
 import LocationDetailsShowWindow from './LocationDetailsShowWindow';
 
 
-export default function LocationDetailsForm (props) {
+export default function LocationDetailsEditForm (props) {
    
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const uploadPreset = process.env.REACT_APP_CLOUD_PRESET; 
     const [selected, setSelected] = useState(props);
+    const [editStatus, setEditStatus] = useState(true);
     const [images, setImages]= useState([]);
     const [location, setLocation] = useState({
         name: "",
@@ -22,15 +23,13 @@ export default function LocationDetailsForm (props) {
         images:[]
     });
   
-    const [submitted,setSubmitted] = useState(true);
+    const [submitted,setSubmitted] = useState(false);
     // const [editStatus,setEditStatus] = useState(true);
    
 
     useEffect(() => {
         setSelected(props);
         console.log("selected props:",props);
-       
-       
     }, [])
 
     const handleInput = (ev) => {
@@ -82,8 +81,7 @@ export default function LocationDetailsForm (props) {
 
     const handleCancelButton = (ev) => {
         ev.preventDefault();
-        // setEditStatus(false);
-        setSubmitted(false);
+        setEditStatus(false);
     }
 
     const handleUpdateSubmit = async (ev) => {
@@ -119,8 +117,9 @@ export default function LocationDetailsForm (props) {
     
     return(
         <div>
+         
             { 
-            !submitted 
+            !submitted && editStatus
             ?
                 (
                 <div className='LocationDetailsFormContainer'>
