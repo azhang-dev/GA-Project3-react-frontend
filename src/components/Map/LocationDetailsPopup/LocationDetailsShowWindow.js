@@ -45,7 +45,7 @@ export default function LocationDetailsShowWindow (props) {
                         <p>Notes: {props.location.note}</p>
                         
                         <p>Images: </p>
-                        <p>{JSON.stringify(props.location.images.map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> ))}</p>
+                        <p>{JSON.stringify(props.location.images).map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p>
                        
                     </div>
                 )
