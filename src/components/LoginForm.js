@@ -41,7 +41,7 @@ function LoginForm(props){
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
       localStorage.setItem("jwt", res.data.jwt)
       props.checkLogin();
-      // localStorage.setItem("user", user);
+  
       navigate(`/dashboard`);
     }catch(err){
       setErrorMessage("Incorrect Login Details");

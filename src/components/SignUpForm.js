@@ -4,7 +4,7 @@ import { API_ROOT } from '../constants';
 import axios from 'axios';
 
 function SignUpForm(props) {
-    const [values, setValues] = useState({
+    const [user, setUser] = useState({
         name: "",
         email: "",
         password: ""
@@ -14,30 +14,29 @@ function SignUpForm(props) {
 
     const handleInput = (ev) => {
         const {name, value} = ev.target
-        setValues({
-        ...values,
+        setUser({
+        ...user,
         [name]: value
         })
-        console.log(values);
-    }
+    }//handleInput
 
     const handleSubmit = async(ev) => {
         ev.preventDefault();
     
         try{
-            const res = await axios.post(`${API_ROOT}/user/create`, values);
+            const res = await axios.post(`${API_ROOT}/user/create`, user);
             console.log('SignUp Sucess!',res);
-            setValues(res.data);
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
+            setUser(res.data.user);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
+            localStorage.setItem("jwt", res.data.jwt);
+            console.log("jwt",res.data.jwt)
             props.checkLogin();
             navigate('/dashboard');
         }catch(err){
             console.log("Error Signing Up:", err)
         }
-        // setName("");
-        // setEmail("");
-        // setPassword("");
-    }
+       
+    }// handleSubmit()
 
     const formDivStyle = {
         margin: "auto",

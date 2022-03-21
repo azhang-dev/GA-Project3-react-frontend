@@ -1,4 +1,4 @@
-import React from 'react'
+
 import SinglePlaceMap from './Map/SinglePlaceMap';
 import './Dashboard.css'
 
