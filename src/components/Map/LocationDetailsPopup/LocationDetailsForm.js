@@ -115,8 +115,8 @@ export default function LocationDetailsForm (props) {
             ?
                 (
                 <div className='LocationDetailsFormContainer'>
-                    <h3>Add Location Details</h3>
                     <form className='inputFormContainer' onSubmit={handleSubmit}>
+                        <h3>Add Location Details</h3>
                         
                         {/* <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/> */}
                         <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
@@ -137,10 +137,6 @@ export default function LocationDetailsForm (props) {
                         <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
 
 
-                        <div className='img-container' >
-                            
-                        </div>
-
                         <div className='btn-container' >
                             <button 
                             onClick={openWidget} 
@@ -149,7 +145,7 @@ export default function LocationDetailsForm (props) {
                                 Upload Images
                             </button>
                         </div>
-                        <br/>
+                        
                         <button>Save</button>
                 
                     </form>

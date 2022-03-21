@@ -37,6 +37,7 @@ function LoginForm(props){
     try {
       const res = await axios.post(`${API_ROOT}/user_token`, {auth: user})
       console.log('Logging Sucess!',res);
+
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
       localStorage.setItem("jwt", res.data.jwt)
       props.checkLogin();
@@ -56,18 +57,19 @@ function LoginForm(props){
     return(
         <div>
             <div style={formDivStyle}>
-            <h1>Log In</h1>
+            <h1>LOG IN</h1>
             {
                 errorMessage && <p className='error-message'> Wrong Login Details</p>
             }
             <form className="ui form" onSubmit={handleSubmit}>
+                <label className='formLabel'>Email</label>
                 <div className="field">
-                    <label>Email</label>
-                    <input name="email" onChange={handleInput} type="text" placeholder="email"/>
+                  <input name="email" onChange={handleInput} type="text" placeholder="email"/>
                 </div>
+
+                <label className='formLabel'>Password</label>
                 <div className="field">
-                    <label>Password</label>
-                    <input name="password" onChange={handleInput} type="password" placeholder="password"/>
+                  <input name="password" onChange={handleInput} type="password" placeholder="password"/>
                 </div>
                 
                 <button className="ui button">Login</button>

@@ -6,7 +6,7 @@ function Dashboard(){
 
   return(
       <div>
-          <h1 className='page-title'>DASHBOARD</h1>
+          {/* <h1 className='page-title'>DASHBOARD</h1> */}
           <div className='map-container'>
               <SinglePlaceMap />
           </div>

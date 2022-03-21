@@ -153,16 +153,16 @@ export default function SinglePlaceMap() {
                 ? 
                 (
                     <div>  
-                        {/* <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
+                        <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
                             setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
                             setNewMarker(null);
                             handleDeleteMarkerClick();
                         }}>
                             <div>
-                                <h2>"Location Marked!"</h2>
+                                <h2>{selectedMarker.name}</h2>
                             </div>
                         
-                        </InfoWindow>   */}
+                        </InfoWindow>  
                         <LocationDetailsShowWindow 
                         location={selectedMarker}
                         getUserMarkers={getUserMarkers} 
@@ -178,7 +178,7 @@ export default function SinglePlaceMap() {
                         handleDeleteMarkerClick();
                     }}>
                         <div>
-                            <h2>"Location Marked!"</h2>
+                            <h2>"New Location Marked!"</h2>
                         </div>
                         
                     </InfoWindow>

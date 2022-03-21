@@ -7,8 +7,12 @@
   background-color: rgb(165, 218, 235, 0.9);
   /* border: black solid 1px; */
   border-radius: 10px;
-  top:90px;
+  /* top:90px; */
+  height:100vh;
+
 }
+
+
 .LocationDetailsShowContainer {
     position: absolute;
   color: #281414;
@@ -17,17 +21,22 @@
   padding: 10px;
   background-color: rgb(165, 218, 235, 0.9);
   /* border: black solid 1px; */
-  border-radius: 10px;
-  top: 90px;
+  /* border-radius: 10px; */
+  /* top: 90px; */
+  height:100vh;
+  width: 300px;
 }
 
 .inputFormContainer{
-    display: inline-flex;
-    flex-direction: column;
+  display: inline-flex;
+  flex-direction: column;
+  margin-top: 50px;
 }
 
 input{
     margin:5px;
+    border-radius: 20px;
+    border: none;
 }
 
 label{
@@ -35,9 +44,38 @@ label{
     vertical-align: 2.5px;
 }
 
+.imageContainer{
+  margin:2px;
+}
+
 .locationImage{
   position: relative;
   display: inline-flexbox;
+  object-fit: cover;
   width: 100px;
   height: 100px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+button{
+  width: 100px;
+  margin:5px;
+  background-color: rgba(255, 82, 47, 0.822) ;
+  border-radius: 10px;
+  border:none;
+}
+
+.cloudinary-button {
+  background-color: rgba(255, 82, 47, 0.822);
+ 
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 28px;
+  height: 28x;
+  cursor: pointer;
+  font-weight: normal;
+  display: inline-block;
+  border-radius: 20px;
+  padding: 1px 2px;
 }

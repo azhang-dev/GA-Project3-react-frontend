@@ -12,7 +12,7 @@ import MyProfile from './Pages/MyProfile';
 import SinglePlaceMap from './components/Map/SinglePlaceMap';
 const user = {
     name: "",
-    email: "",
+    email: "",  
   }
 
 function App() {
@@ -70,7 +70,7 @@ function App() {
 
                     (
                       <ul>
-                        <li>Welcome! {currentUser.name.toUpperCase()}</li>
+                        <li className='welcomeText'>Welcome! {currentUser.name.toUpperCase()}</li>
                         <li><Link to='/dashboard' className="nav-links-header">Dashboard</Link></li>
                         <li><Link to='/profile' className="nav-links-header">Profile</Link></li>
                         <li><Link onClick = {handleLogout} to='/' className="nav-links-header">Log Out</Link></li>

@@ -46,18 +46,18 @@ function SignUpForm(props) {
 
     return(
         <div style={formDivStyle}>
-            <h1> Sign Up</h1>
+            <h1> SIGN UP</h1>
             <form className="ui form" onSubmit={handleSubmit}>
+                    <label className='formLabel'>Name</label>
                 <div className='field'>
-                    <label>Name</label>
                     <input name='name' onChange={handleInput} type="text" placeholder="Name"/>
                 </div>
+                    <label className='formLabel'>Email</label>
                 <div className='field'>
-                    <label>email</label>
                     <input name='email' onChange={handleInput} type="text" placeholder="Email"/>
                 </div>
+                    <label className='formLabel'>Password</label>
                 <div className='field'>
-                    <label>Password</label>
                     <input name='password' onChange={handleInput} type="password" placeholder="Password"/>
                 </div>
 
