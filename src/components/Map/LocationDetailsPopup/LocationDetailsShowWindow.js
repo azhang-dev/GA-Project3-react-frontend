@@ -1,21 +1,43 @@
 import React, {useState} from 'react';
-import LocationDetailsForm from './LocationDetailsForm';
+import LocationDetailsEditForm from './LocationDetailsEditForm';
+import { API_ROOT } from '../../../constants';
+import axios from 'axios';
 import "./LocationDetailsForm.css"
 
 export default function LocationDetailsShowWindow (props) {
     const [editStatus, setEditStatus] = useState(false)
+    const [deleted, setDeleted]= useState(false)
+
     const handleEditButton = (ev) => {
+        ev.preventDefault();
         console.log("edit button clicked")
         setEditStatus(true);
+    }
+    
+    const handleDeleteButton = async (ev) => {
+        ev.preventDefault();
+        console.log("Delete button clicked-location:",props.location.id);
+        try{
+            const res = await axios.delete(`${API_ROOT}/locations/${props.location.id}`);
+            console.log("location deleted:",res);
+            props.getUserMarkers();
+            setDeleted(true);
+        }catch(err){
+            console.log("Error deleting locations", err)
+        }
     }
 
     return(
         <div>
+
             {
-                !editStatus ? (
+                !editStatus 
+                ? 
+                (
                     <div className='LocationDetailsShowContainer'>
                         <h3>{props.location.name} </h3>
                         <button onClick={handleEditButton}>Edit</button>
+                        <button onClick={handleDeleteButton}>Delete</button>
                         <p>City: {props.location.city} </p>
                         <p>Country: {props.location.country} </p>
                         <p>Date Visited: {props.location.date_visited}</p>
@@ -25,8 +47,7 @@ export default function LocationDetailsShowWindow (props) {
                 )
                 :
                 (
-                // <p>edit form here</p>
-                <LocationDetailsForm location={props.location} editStatus={editStatus} />
+                <LocationDetailsEditForm location={props.location} editStatus={editStatus} />
                 )
             }
         </div>

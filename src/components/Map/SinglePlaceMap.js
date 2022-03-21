@@ -163,7 +163,10 @@ export default function SinglePlaceMap() {
                             </div>
                         
                         </InfoWindow>   */}
-                        <LocationDetailsShowWindow location={selectedMarker} />   
+                        <LocationDetailsShowWindow 
+                        location={selectedMarker}
+                        getUserMarkers={getUserMarkers} 
+                        />   
                     </div>
                 ) 
                 : 

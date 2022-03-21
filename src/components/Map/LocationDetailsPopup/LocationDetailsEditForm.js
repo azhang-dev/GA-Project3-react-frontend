@@ -22,8 +22,9 @@ export default function LocationDetailsForm (props) {
         images:[]
     });
   
-    const [submitted,setSubmitted] = useState(false);
-    const [uploadImageMessage,setUploadImageMessage] = useState("");
+    const [submitted,setSubmitted] = useState(true);
+    // const [editStatus,setEditStatus] = useState(true);
+   
 
     useEffect(() => {
         setSelected(props);
@@ -79,7 +80,13 @@ export default function LocationDetailsForm (props) {
       }
     );
 
-    const handleSubmit = async (ev) => {
+    const handleCancelButton = (ev) => {
+        ev.preventDefault();
+        // setEditStatus(false);
+        setSubmitted(false);
+    }
+
+    const handleUpdateSubmit = async (ev) => {
         ev.preventDefault();
       
         console.log("location info",location);
@@ -89,14 +96,16 @@ export default function LocationDetailsForm (props) {
             ...selected.selectedMarker,
             images
         }// sends both location values + lat lng from selected marker(generated from googlemap)
- 
+
         try{
-            const res = await axios.post(`${API_ROOT}/locations`, postData);
+            const res = await axios.patch(`${API_ROOT}/locations/${props.location.id}`, postData);
             console.log("Submit Sucess!", res);  
             setLocation(res.data);
             setImages(res.data);
             setSubmitted(true);
             props.getUserMarkers();
+        
+            
         }catch(err){
             console.log("Error submitting form:", err)
         } 
@@ -111,21 +120,20 @@ export default function LocationDetailsForm (props) {
     return(
         <div>
             { 
-            !submitted && !selected.id
+            !submitted 
             ?
                 (
                 <div className='LocationDetailsFormContainer'>
-                    <h3>Add Location Details</h3>
-                    <form className='inputFormContainer' onSubmit={handleSubmit}>
+                    <h3>Edit Location Details</h3>
+                    <form className='inputFormContainer' onSubmit={handleUpdateSubmit}>
                         
-                        {/* <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/> */}
-                        <input name="name" onChange={handleInput} type="text" placeholder="Name"/>
-                    
-                        <input name="city" onChange={handleInput} type="text" placeholder="City"/>
+                        <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/>
+
+                        <input name="city" value={props.location.city} onChange={handleInput} type="text" placeholder="City"/>
                 
-                        <input name="country" onChange={handleInput} type="text" placeholder="Country"/>
+                        <input name="country" value={props.location.country} onChange={handleInput} type="text" placeholder="Country"/>
                 
-                        <input name="date" onChange={handleInput} type="date" placeholder="Date"/>
+                        <input name="date" value={props.location.date} onChange={handleInput} type="date" placeholder="Date"/>
 
                         <div>
                             <input name="visited" defaultChecked={location.visited} onChange={handleToggleVisited} type="checkbox" />
@@ -134,7 +142,7 @@ export default function LocationDetailsForm (props) {
                             <label> Want to visit</label>
                         </div>
                         
-                        <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
+                        <input name="note" value={props.location.note} onChange={handleInput} type="textfield" placeholder="Notes"/>
 
 
                         <div className='img-container' >
@@ -150,6 +158,7 @@ export default function LocationDetailsForm (props) {
                             </button>
                         </div>
                         <br/>
+                        <button onClick={handleCancelButton}>Cancel</button>
                         <button>Save</button>
                 
                     </form>
