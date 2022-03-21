@@ -37,7 +37,6 @@ function LoginForm(props){
     try {
       const res = await axios.post(`${API_ROOT}/user_token`, {auth: user})
       console.log('Logging Sucess!',res);
-      // console.log(user);
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.jwt}`;
       localStorage.setItem("jwt", res.data.jwt)
       props.checkLogin();

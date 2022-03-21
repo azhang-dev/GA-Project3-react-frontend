@@ -40,6 +40,8 @@ export default function LocationDetailsShowWindow (props) {
                         <p>City: {props.location.city} </p>
                         <p>Country: {props.location.country} </p>
                         <p>Date Visited: {props.location.date_visited}</p>
+                        {/* <p>Visited: {props.location.visited}</p>
+                        <p>Bucketlist: {(props.location.bucketlist)}</p> */}
                         <p>Notes: {props.location.note}</p>
                         <p>Images: {props.location.images.map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p>
                     </div>

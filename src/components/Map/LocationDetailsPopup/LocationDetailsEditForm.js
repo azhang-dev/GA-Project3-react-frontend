@@ -38,7 +38,7 @@ export default function LocationDetailsEditForm (props) {
         ...location,
         [name]: value
         })
-        // console.log(location);
+        console.log(location);
     }
     //Handles values for visted/bucketlist. Toggle between boolean when checked/unchecked box
     const handleToggleVisited = (ev) => {
@@ -88,12 +88,10 @@ export default function LocationDetailsEditForm (props) {
         ev.preventDefault();
       
         console.log("location info",location);
-        console.log("selected info",selected.selectedMarker);
         const postData = {
             ...location,
-            ...selected.selectedMarker,
             images
-        }// sends both location values + lat lng from selected marker(generated from googlemap)
+        }
 
         try{
             const res = await axios.patch(`${API_ROOT}/locations/${props.location.id}`, postData);
@@ -126,13 +124,13 @@ export default function LocationDetailsEditForm (props) {
                     <h3>Edit Location Details</h3>
                     <form className='inputFormContainer' onSubmit={handleUpdateSubmit}>
                         
-                        <input name="name" value={props.location.name} onChange={handleInput} type="text" placeholder="Name"/>
+                        <input name="name" defaultValue={props.location.name} onChange={handleInput} type="text" placeholder="Name"/>
 
-                        <input name="city" value={props.location.city} onChange={handleInput} type="text" placeholder="City"/>
+                        <input name="city" defaultValue={props.location.city} onChange={handleInput} type="text" placeholder="City"/>
                 
-                        <input name="country" value={props.location.country} onChange={handleInput} type="text" placeholder="Country"/>
+                        <input name="country" defaultValue={props.location.country} onChange={handleInput} type="text" placeholder="Country"/>
                 
-                        <input name="date" value={props.location.date} onChange={handleInput} type="date" placeholder="Date"/>
+                        <input name="date" defaultValue={props.location.date} onChange={handleInput} type="date" placeholder="Date"/>
 
                         <div>
                             <input name="visited" defaultChecked={location.visited} onChange={handleToggleVisited} type="checkbox" />
@@ -141,7 +139,7 @@ export default function LocationDetailsEditForm (props) {
                             <label> Want to visit</label>
                         </div>
                         
-                        <input name="note" value={props.location.note} onChange={handleInput} type="textfield" placeholder="Notes"/>
+                        <input name="note" defaultValue={props.location.note} onChange={handleInput} type="textfield" placeholder="Notes"/>
 
 
                         <div className='img-container' >
@@ -166,7 +164,8 @@ export default function LocationDetailsEditForm (props) {
                 )  
                 :
                 (
-                <LocationDetailsShowWindow location={location}/>
+                    <p></p>
+                // <LocationDetailsShowWindow location={location}/>
                 )
              }
         </div> 
