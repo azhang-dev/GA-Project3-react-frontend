@@ -146,8 +146,10 @@ export default function LocationDetailsEditForm (props) {
                             </button>
                         </div>
                         <br/>
-                        <button onClick={handleCancelButton}>Cancel</button>
-                        <button>Save</button>
+                        <div className='btn-container' >
+                            <button onClick={handleCancelButton}className='cloudinary-button'>Cancel</button>
+                            <button className='cloudinary-button'>Save</button>
+                        </div>
                 
                     </form>
 

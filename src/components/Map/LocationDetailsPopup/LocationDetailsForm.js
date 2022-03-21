@@ -137,9 +137,9 @@ export default function LocationDetailsForm (props) {
                             className='cloudinary-button'>
                                 Upload Images
                             </button>
+                            <button className='cloudinary-button'>Save</button>
                         </div>
                         
-                        <button>Save</button>
                 
                     </form>
 

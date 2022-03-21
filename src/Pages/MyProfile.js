@@ -65,9 +65,10 @@ function MyProfile(props){
             <div className='profileLocationsContainer'>
             <h3>Locations</h3>
             <p>Total Locations marked: {locations.length}</p>
-            <p>Gallery</p>
+            <h4>Gallery</h4>
             {/* <p>{props.location.images.map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p> */}
             
+            <p> to be added..</p>
             </div>
         </div>
 
