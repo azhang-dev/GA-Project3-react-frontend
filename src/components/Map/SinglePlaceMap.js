@@ -13,6 +13,9 @@ import "@reach/combobox/styles.css";
 //import custom styles for googlemaps from "snazzy maps"
 import mapStyles from "./mapStyles";
 
+import {BiCurrentLocation} from 'react-icons/bi'
+
+
 import "./placeMap.css"
 
 //////////IMPORTS
@@ -44,10 +47,9 @@ export default function SinglePlaceMap() {
         libraries,
     });
     const [markers, setMarkers] = useState([]); // creates markers on the map
-  
     const [selectedMarker, setSelectedMarker] = useState(null); // clicking on marker -shows details of the current selectedMarker marker in a new state 
-    ////^States
     const [newMarker, setNewMarker] = useState(null);
+    ////^States
    
 
     useEffect(() => {
@@ -125,30 +127,8 @@ export default function SinglePlaceMap() {
                 {selectedMarker && selectedMarker.id
                 ? 
                 (
-                    <div>
-                        {/* <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
-                            setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
-                            setNewMarker(null);
-                        }}>
-                            <div>
-                                <h2>"Location Marked!"</h2>
-                                <button onClick={handleDeleteMarkerClick}>Remove Marker</button>
-                            </div>
-                            
-                        </InfoWindow> */}
-                        {/* { newMarker && <LocationDetailsForm selectedMarker={newMarker}/> }
-                        { selectedMarker && <LocationDetailsShowWindow location={selectedMarker}/> } */}
-                        {/* {
-                            newMarker
-                            ?
-                            <LocationDetailsForm selectedMarker={selectedMarker}/>
-                            :
-                            <LocationDetailsShowWindow location={selectedMarker}/> 
-                        } */}
-                        {/* <LocationPopupWindow location={selectedMarker}/> */}
-                        {/* <LocationDetailsForm selectedMarker={selectedMarker}/> */}
-                        <LocationDetailsShowWindow location={selectedMarker} />
-                        
+                    <div>    
+                        <LocationDetailsShowWindow location={selectedMarker} />   
                     </div>
                 ) 
                 : 
@@ -161,11 +141,10 @@ export default function SinglePlaceMap() {
                     }}>
                         <div>
                             <h2>"Location Marked!"</h2>
-                            {/* <button onClick={handleDeleteMarkerClick}>Remove Marker</button> */}
                         </div>
                         
                     </InfoWindow>
-                    <LocationDetailsForm selectedMarker={newMarker}/> 
+                    <LocationDetailsForm selectedMarker={newMarker} /> 
                 </div>
                 }
             
@@ -175,6 +154,7 @@ export default function SinglePlaceMap() {
     );
 }
 
+//Function for GeoLocation
 function Locate({panTo}) {
     return (
         <button className="locate" onClick={() => { 
@@ -190,29 +170,12 @@ function Locate({panTo}) {
                 () => {console.log("cannot perform GEOLOCATION")}// no error handling needed -null
             ); //getCurrentPosition(sucess,error,options)
         }}>
-            <img src="./images/location.png" alt="current location icon" />
+            <BiCurrentLocation className='GeoLocation-Icon'/>
         </button>
     );
 }
 
-// function LocationPopupWindow(props){
-//     console.log("location data:",props)
-//     const locationID =  props.location.id;
-//     console.log("locationID:",locationID);
-//     if(locationID !== undefined){
-//         return(
-//                 <LocationDetailsShowWindow 
-//                  location={props}
-//                 /> 
-//         )
-        
-//     }else{
-//         return <LocationDetailsForm /> 
-//     }
-   
-   
-// }
-
+// Function for Search Bar
 function Search({panTo}) {
     const {
         ready, 

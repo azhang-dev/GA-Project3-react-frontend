@@ -4,7 +4,6 @@ import "./LocationDetailsForm.css"
 
 export default function LocationDetailsShowWindow (props) {
     const [editStatus, setEditStatus] = useState(false)
-    // const locationID = props.location.id
     const handleEditButton = (ev) => {
         console.log("edit button clicked")
         setEditStatus(true);
