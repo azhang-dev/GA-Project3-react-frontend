@@ -21,7 +21,7 @@ export default function LocationDetailsForm (props) {
         date_visited: "",
         bucketlist: false,
         note: "",
-        images:[""]
+        images:[]
     });
   
     const [submitted,setSubmitted] = useState(false); // will help change the ternary expression to switch to another component

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import LocationDetailsEditForm from './LocationDetailsEditForm';
 import { API_ROOT } from '../../../constants';
 import axios from 'axios';
@@ -7,10 +7,38 @@ import "./LocationDetailsForm.css"
 export default function LocationDetailsShowWindow (props) {
     const [editStatus, setEditStatus] = useState(false)
     const [deleted, setDeleted]= useState(false)
+    const [location, setLocation] = useState({
+        name: "",
+        city: "",
+        country: "",
+        visited: false,
+        date_visited: "",
+        bucketlist: false,
+        note: "",
+        images:[]
+    });
+
+    useEffect(
+        () => {
+        getLocations()
+        }, [],
+    );
+
 
     const handleEditButton = (ev) => {
         console.log("edit button clicked")
         setEditStatus(true);
+    }
+    
+    const getLocations = async () => {
+    try{
+        const res = await axios.get(`${API_ROOT}/locations/${props.location.id}`);
+        console.log("User Locations:", res.data);
+        setLocation(res.data);
+    }catch(err){
+        console.log("Cannot get Locations:", err)
+    }
+
     }
     
     const handleDeleteButton = async (ev) => {
@@ -42,7 +70,7 @@ export default function LocationDetailsShowWindow (props) {
                         <p>Date Visited: {props.location.date_visited}</p>
                         <p>Notes: {props.location.note}</p>
                         <p>Images: </p>
-                        <p>{JSON.parse(props.location.images).map(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p>
+                        <p>{JSON.parse(location.images.map)(img => <img key={img} src = {img} className='locationImage'alt='Location'/> )}</p>
                        
                     </div>
                 )
