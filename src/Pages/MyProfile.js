@@ -15,22 +15,7 @@ function MyProfile(props){
     }, [],
   );
 
-  // const checkLogin = () => {
-  //   let token = localStorage.getItem("jwt");
-
-  //   //TODO check that token is not null before doing a request
-  //   axios.get(`${API_ROOT}/users/current`, {
-  //     headers: {
-  //       'Authorization' : "Bearer " +  token,
-  //     }
-  //   })
-  //   .then(res => {
-  //     console.log("profile user:", res.data)
-  //     setCurrentUser(res.data);
-  //   })
-  //   .catch(err => console.log("no current user",err))
-
-  // }
+  
   const navigate = useNavigate();
 
   const handleEditClick = (ev) => {

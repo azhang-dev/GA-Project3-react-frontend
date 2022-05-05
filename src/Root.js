@@ -6,7 +6,7 @@ return (
       {/* <Header className="App-header" /> */}
       
       <h1>WELCOME TO TRAVELOG</h1>
-      <p> Fun travel companion app</p>
+      <p> A fun travel companion app to...</p>
 
       <div className='appDetailContainer'>
         <div className='contentContainer'>
