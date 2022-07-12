@@ -20,7 +20,7 @@ function Profile(){
       }
     })
     .then(res => {
-      console.log("profile user:", res.data)
+      // console.log("profile user:", res.data)
       setCurrentUser(res.data);
     })
     .catch(err => console.log("no current user",err))

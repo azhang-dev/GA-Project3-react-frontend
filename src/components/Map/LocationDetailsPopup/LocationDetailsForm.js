@@ -130,7 +130,7 @@ export default function LocationDetailsForm (props) {
                         <input name="note" onChange={handleInput} type="textfield" placeholder="Notes"/>
 
 
-                        <div className='btn-container' >
+                        {/* <div className='btn-container' >
                             <button 
                             onClick={openWidget} 
                             id="upload_widget" 
@@ -138,7 +138,7 @@ export default function LocationDetailsForm (props) {
                                 Upload Images
                             </button>
                             <button className='cloudinary-button'>Save</button>
-                        </div>
+                        </div> */}
                         
                 
                     </form>

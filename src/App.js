@@ -21,6 +21,7 @@ function App() {
 
   let [currentUser, setCurrentUser] = useState(user);
   let [userIsLoaded, setUserIsLoaded] = useState(false);
+
   
   useEffect(() => {
     checkLogin()
@@ -50,7 +51,7 @@ function App() {
   
   const handleLogout = () => {
     setCurrentUser(user);
-    console.log('Logged Out-user:',currentUser);
+    // console.log('Logged Out-user:',currentUser);
     localStorage.removeItem("jwt");
     axios.defaults.headers.common['Authorization'] = ""
   }

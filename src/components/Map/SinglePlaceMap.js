@@ -136,17 +136,29 @@ export default function SinglePlaceMap() {
                 />)}
                 {
                     newMarker && (
-                        <Marker 
-                        key={`${newMarker.lat},${newMarker.lng}`} 
-                        position={{lat: parseFloat(newMarker.lat), lng: parseFloat(newMarker.lng) }}
-                        onClick={() => {
-                            setSelectedMarker(newMarker);
-                            console.log("selected marker:",newMarker);
-
+                        <div>
+                            <Marker 
+                            key={`${newMarker.lat},${newMarker.lng}`} 
+                            position={{lat: parseFloat(newMarker.lat), lng: parseFloat(newMarker.lng) }}
+                            onClick={() => {
+                                setSelectedMarker(newMarker);
+                                console.log("selected marker:",newMarker);
+    
+                            
+                                // on click saves the selectedMarker marker to the selectedState
+                            }}
+                            />
+                            <InfoWindow position={{lat: parseFloat(selectedMarker.lat), lng: parseFloat(selectedMarker.lng)}} onCloseClick={() => {
+                            setSelectedMarker(null);// reset setSelectedMarker so inforWindow can be shown when selecting a new marker- toggling it on an off
+                            setNewMarker(null);
+                            handleDeleteMarkerClick();
+                        }}>
+                            <div>
+                                <h2>New Location</h2>
+                            </div>
                         
-                            // on click saves the selectedMarker marker to the selectedState
-                        }}
-                        />
+                        </InfoWindow> 
+                        </div>
                     )
                 }
 
